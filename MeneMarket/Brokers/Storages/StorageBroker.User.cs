@@ -12,5 +12,7 @@ namespace MeneMarket.Brokers.Storages
 
         public IQueryable<User> SelectAllUsers() =>
             SelectAll<User>();
+        public async ValueTask<User> SelectUserByIdAsync(Guid userId) =>
+            await SelectAsync<User>(userId);
     }
 }
