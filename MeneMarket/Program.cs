@@ -1,4 +1,5 @@
 using MeneMarket.Brokers.Storages;
+using MeneMarket.Services.Foundations.Products;
 using MeneMarket.Services.Foundations.Users;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StorageBroker>();
 builder.Services.AddTransient<IStorageBroker, StorageBroker>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

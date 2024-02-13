@@ -1,0 +1,35 @@
+﻿using MeneMarket.Brokers.Storages;
+using MeneMarket.Models.Foundations.Products;
+
+namespace MeneMarket.Services.Foundations.Products
+{
+    public class ProductService : IProductService
+    {
+        private readonly IStorageBroker storageBroker;
+
+        public ProductService(IStorageBroker storageBroker)
+        {
+            this.storageBroker = storageBroker;
+        }
+
+        public async ValueTask<Product> AddProductAsync(Product product) =>
+            await this.storageBroker.InsertProductAsync(product);
+
+        public Task<List<Product>> RetrieveAllProducts() =>
+            this.storageBroker.SelectAllProductsAsync();
+
+        public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
+            await this.storageBroker.SelectProductByIdAsync(id);
+
+        public async ValueTask<Product> ModifyProductAsync(Product product) =>
+            await this.storageBroker.UpdateProductAsync(product);
+
+        public async ValueTask<Product> RemoveProductAsync(Guid id)
+        {
+            Product product =
+                await this.storageBroker.SelectProductByIdAsync(id);
+
+            return await this.storageBroker.DeleteProductAsync(product);
+        }
+    }
+}

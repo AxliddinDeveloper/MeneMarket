@@ -30,6 +30,9 @@ namespace MeneMarket.Migrations
                     b.Property<int>("Belong")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("Color")
+                        .HasColumnType("INTEGER");
+
                     b.Property<short>("Count")
                         .HasColumnType("INTEGER");
 
@@ -43,7 +46,7 @@ namespace MeneMarket.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductAttribute");
+                    b.ToTable("ProductAttributes");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
@@ -64,24 +67,19 @@ namespace MeneMarket.Migrations
                     b.Property<long>("LastPrice")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("NewPrice")
+                    b.Property<long?>("NewPrice")
                         .HasColumnType("INTEGER");
 
-                    b.Property<short>("NumberSold")
+                    b.Property<short?>("NumberSold")
                         .HasColumnType("INTEGER");
 
-                    b.Property<short>("NumberStars")
+                    b.Property<short?>("NumberStars")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -128,23 +126,7 @@ namespace MeneMarket.Migrations
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
-                    b.HasOne("MeneMarket.Models.Foundations.Users.User", "User")
-                        .WithMany("Products")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
-                {
                     b.Navigation("ProductAttributes");
-                });
-
-            modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
