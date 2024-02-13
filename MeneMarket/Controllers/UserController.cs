@@ -1,5 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Users;
-using MeneMarket.Services.Foundations.Users;
+using MeneMarket.Services.Orchestrations.Users;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -9,36 +9,35 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class UserController : RESTFulController
     {
-        private readonly IUserService userService;
+        private readonly IUserOrchestrationService userOrchestrationService;
 
-        public UserController(IUserService userService)
-        {
-            this.userService = userService;
-        }
+        public UserController(
+            IUserOrchestrationService userOrchestrationService) =>
+                this.userOrchestrationService = userOrchestrationService;
 
         [HttpPost]
         public async ValueTask<ActionResult<User>> PostUser(User user) =>
-            await this.userService.AddUserAsync(user);
+            await this.userOrchestrationService.AddUserAsync(user);
 
         [HttpGet]
         public ActionResult<IQueryable<User>> GelAllUsers()
         {
             IQueryable<User> allUserss =
-                this.userService.RetrieveAllUsers();
+                this.userOrchestrationService.RetrieveAllUsers();
 
             return Ok(allUserss);
         }
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<User>> GetUserByIdAsync(Guid id) =>
-            await this.userService.RetrieveUserByIdAsync(id);
+            await this.userOrchestrationService.RetrieveUserByIdAsync(id);
 
         [HttpPut]
         public async ValueTask<ActionResult<User>> PutHome(User user) =>
-            await this.userService.ModifyUserAsync(user);
+            await this.userOrchestrationService.ModifyUserAsync(user);
 
         [HttpDelete]
         public async ValueTask<ActionResult<User>> DeleteUser(Guid id) =>
-            await this.userService.RemoveUserAsync(id);
+            await this.userOrchestrationService.RemoveUserAsync(id);
     }
 }
