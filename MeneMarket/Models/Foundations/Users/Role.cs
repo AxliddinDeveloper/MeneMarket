@@ -3,6 +3,6 @@
     public enum Role
     {
         Admin,
-        Seller
+        User
     }
 }

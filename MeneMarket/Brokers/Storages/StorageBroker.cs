@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeneMarket.Brokers.Storages
 {
-    public partial class StorageBroker : EFxceptionsContext
+    public partial class StorageBroker : EFxceptionsContext, IStorageBroker
     {
         public StorageBroker()
         {
@@ -53,7 +53,7 @@ namespace MeneMarket.Brokers.Storages
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data source = Sheenam.db";
+            string connectionString = "Data source = MeneMarket.db";
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             optionsBuilder.UseLazyLoadingProxies();
             optionsBuilder.UseSqlite(connectionString);
