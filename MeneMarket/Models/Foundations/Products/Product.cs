@@ -1,4 +1,5 @@
-﻿using MeneMarket.Models.Foundations.ProductAttributes;
+﻿using MeneMarket.Models.Foundations.ImageMetadatas;
+using MeneMarket.Models.Foundations.ProductAttributes;
 
 namespace MeneMarket.Models.Foundations.Products
 {
@@ -13,6 +14,7 @@ namespace MeneMarket.Models.Foundations.Products
         public short? NumberStars { get; set; }
         public bool IsArchived { get; set; }
         public ProductType ProductType { get; set; }
+        public virtual ICollection<ImageMetadata> ImageMetadatas { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
     }
 }

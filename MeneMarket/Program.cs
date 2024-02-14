@@ -1,9 +1,15 @@
+using MeneMarket.Brokers.Files;
 using MeneMarket.Brokers.Storages;
+using MeneMarket.Services.Foundations.Files;
+using MeneMarket.Services.Foundations.ImageMetadatas;
 using MeneMarket.Services.Foundations.ProductAttributes;
 using MeneMarket.Services.Foundations.Products;
 using MeneMarket.Services.Foundations.Users;
+using MeneMarket.Services.Orchestrations.Images;
 using MeneMarket.Services.Orchestrations.Products;
 using MeneMarket.Services.Orchestrations.Users;
+using MeneMarket.Services.Processings.Files;
+using MeneMarket.Services.Processings.Images;
 using MeneMarket.Services.Processings.Products;
 using MeneMarket.Services.Processings.Users;
 
@@ -21,24 +27,30 @@ AddFoundationServices(builder);
 static void AddBrokers(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<IStorageBroker, StorageBroker>();
+    builder.Services.AddTransient<IFileBroker, FileBroker>();
 }
 
 static void AddFoundationServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IFileService, FileService>();
     builder.Services.AddTransient<IUserService, UserService>();
     builder.Services.AddTransient<IProductService, ProductService>();
+    builder.Services.AddTransient<IImageMetadataService, ImageMetadataService>();
     builder.Services.AddTransient<IProductAttributeService, ProductAttributeService>();
 }
 
 static void AddProcessingServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IFileProcessingService, FileProcessingService>();
     builder.Services.AddTransient<IUserProcessingService, UserProcessingService>();
     builder.Services.AddTransient<IProductProcessingService, ProductProcessingService>();
+    builder.Services.AddTransient<IImageMetadataProcessingService, ImageMetadataProcessingService>();
 }
 
 static void AddOrchestrationServices(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<IUserOrchestrationService, UserOrchestrationService>();
+    builder.Services.AddTransient<IImageOrchestrationService, ImageOrchestrationService>();
     builder.Services.AddTransient<IProductOrchestrationService, ProductOrchestrationService>();
 }
 

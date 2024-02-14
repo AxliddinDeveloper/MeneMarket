@@ -21,6 +21,34 @@ namespace MeneMarket.Migrations
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Format")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<float>("Size")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ImageMetadatas");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
                 {
                     b.Property<Guid>("ProductAttributeId")
@@ -113,6 +141,15 @@ namespace MeneMarket.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany("ImageMetadatas")
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -126,6 +163,8 @@ namespace MeneMarket.Migrations
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
+                    b.Navigation("ImageMetadatas");
+
                     b.Navigation("ProductAttributes");
                 });
 #pragma warning restore 612, 618

@@ -48,6 +48,27 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ImageMetadatas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Size = table.Column<float>(type: "REAL", nullable: false),
+                    Format = table.Column<int>(type: "INTEGER", nullable: false),
+                    FilePath = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageMetadatas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImageMetadatas_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductAttributes",
                 columns: table => new
                 {
@@ -70,6 +91,11 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImageMetadatas_ProductId",
+                table: "ImageMetadatas",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductAttributes_ProductId",
                 table: "ProductAttributes",
                 column: "ProductId");
@@ -78,6 +104,9 @@ namespace MeneMarket.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ImageMetadatas");
+
             migrationBuilder.DropTable(
                 name: "ProductAttributes");
 
