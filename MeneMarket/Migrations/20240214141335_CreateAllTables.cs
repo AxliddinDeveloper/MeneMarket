@@ -19,6 +19,7 @@ namespace MeneMarket.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Brand = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<long>(type: "INTEGER", nullable: false),
+                    AdvertisingPrice = table.Column<long>(type: "INTEGER", nullable: true),
                     ScidPrice = table.Column<long>(type: "INTEGER", nullable: true),
                     NumberSold = table.Column<short>(type: "INTEGER", nullable: true),
                     NumberStars = table.Column<short>(type: "INTEGER", nullable: true),
@@ -120,6 +121,7 @@ namespace MeneMarket.Migrations
                 {
                     OfferLinkId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Link = table.Column<string>(type: "TEXT", nullable: true),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },

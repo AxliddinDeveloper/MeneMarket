@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240214122000_CreateAllTables")]
+    [Migration("20240214141335_CreateAllTables")]
     partial class CreateAllTables
     {
         /// <inheritdoc />
@@ -78,6 +78,9 @@ namespace MeneMarket.Migrations
                 {
                     b.Property<Guid>("OfferLinkId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Link")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -159,6 +162,9 @@ namespace MeneMarket.Migrations
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<long?>("AdvertisingPrice")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Brand")
                         .HasColumnType("TEXT");

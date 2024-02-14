@@ -10,6 +10,7 @@ namespace MeneMarket.Models.Foundations.Products
         public string Description { get; set; }
         public string? Brand { get; set; }
         public long Price { get; set; }
+        public long? AdvertisingPrice { get; set; }
         public long? ScidPrice { get; set; }
         public short? NumberSold { get; set; }
         public short? NumberStars { get; set; }

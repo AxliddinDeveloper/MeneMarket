@@ -77,6 +77,9 @@ namespace MeneMarket.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Link")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -156,6 +159,9 @@ namespace MeneMarket.Migrations
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<long?>("AdvertisingPrice")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Brand")
                         .HasColumnType("TEXT");
