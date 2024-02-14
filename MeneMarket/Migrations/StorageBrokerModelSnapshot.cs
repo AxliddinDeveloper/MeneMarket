@@ -67,9 +67,6 @@ namespace MeneMarket.Migrations
                     b.Property<long>("LastPrice")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("NewPrice")
-                        .HasColumnType("INTEGER");
-
                     b.Property<short?>("NumberSold")
                         .HasColumnType("INTEGER");
 
@@ -77,6 +74,9 @@ namespace MeneMarket.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("ScidPrice")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ProductId");

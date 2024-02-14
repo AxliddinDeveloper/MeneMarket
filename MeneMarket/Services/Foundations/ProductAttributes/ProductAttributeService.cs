@@ -15,21 +15,16 @@ namespace MeneMarket.Services.Foundations.ProductAttributes
         public async ValueTask<ProductAttribute> AddProductAttributeAsync(ProductAttribute productAttribute) =>
             await this.storageBroker.InsertProductAttributeAsync(productAttribute);
 
+        public IQueryable<ProductAttribute> RetrieveAllProductAttributes() =>
+            this.storageBroker.SelectAllProductAttributes();
+
+        public async ValueTask<ProductAttribute> RetrieveProductAttributeByIdAsync(Guid id) =>
+            await this.storageBroker.SelectProductAttributeByIdAsync(id);
+
         public async ValueTask<ProductAttribute> ModifyProductAttributeAsync(ProductAttribute PoductAttribute) =>
             await this.storageBroker.UpdateProductAttributeAsync(PoductAttribute);
 
-        public async ValueTask<ProductAttribute> RemoveProductAttributeAsync(Guid id)
-        {
-            ProductAttribute productAttribute = 
-                await this.RetrieveProductAttributeByIdAsync(id);
-
-            return await this.storageBroker.DeleteProductAttributeAsync(productAttribute);
-        }
-
-        public IQueryable<ProductAttribute> RetrieveAllProductAttributes() =>
-            this.RetrieveAllProductAttributes();
-
-        public async ValueTask<ProductAttribute> RetrieveProductAttributeByIdAsync(Guid id) =>
-            await this.RetrieveProductAttributeByIdAsync(id);
+        public async ValueTask<ProductAttribute> RemoveProductAttributeAsync(ProductAttribute productAttribute) =>
+             await this.storageBroker.DeleteProductAttributeAsync(productAttribute);
     }
 }

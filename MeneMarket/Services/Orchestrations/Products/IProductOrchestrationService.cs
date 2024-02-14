@@ -1,13 +1,13 @@
 ﻿using MeneMarket.Models.Foundations.Products;
 
-namespace MeneMarket.Services.Foundations.Products
+namespace MeneMarket.Services.Orchestrations.Products
 {
-    public interface IProductService
+    public interface IProductOrchestrationService
     {
         ValueTask<Product> AddProductAsync(Product product);
-        Task<List<Product>> RetrieveAllProductsAsync();
+        Task<List<Product>> RetrieveAllProducts();
         ValueTask<Product> RetrieveProductByIdAsync(Guid id);
         ValueTask<Product> ModifyProductAsync(Product product);
-        ValueTask<Product> RemoveProductAsync(Product product);
+        ValueTask<Product> RemoveProductAsync(Guid id);
     }
 }

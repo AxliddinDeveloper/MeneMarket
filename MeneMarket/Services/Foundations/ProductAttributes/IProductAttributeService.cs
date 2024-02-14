@@ -9,6 +9,6 @@ namespace MeneMarket.Services.Foundations.ProductAttributes
         IQueryable<ProductAttribute> RetrieveAllProductAttributes();
         ValueTask<ProductAttribute> RetrieveProductAttributeByIdAsync(Guid id);
         ValueTask<ProductAttribute> ModifyProductAttributeAsync(ProductAttribute productAttribute);
-        ValueTask<ProductAttribute> RemoveProductAttributeAsync(Guid id);
+        ValueTask<ProductAttribute> RemoveProductAttributeAsync(ProductAttribute productAttribute);
     }
 }

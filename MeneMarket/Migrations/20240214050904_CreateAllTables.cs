@@ -19,7 +19,7 @@ namespace MeneMarket.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Brand = table.Column<string>(type: "TEXT", nullable: true),
                     LastPrice = table.Column<long>(type: "INTEGER", nullable: false),
-                    NewPrice = table.Column<long>(type: "INTEGER", nullable: true),
+                    ScidPrice = table.Column<long>(type: "INTEGER", nullable: true),
                     NumberSold = table.Column<short>(type: "INTEGER", nullable: true),
                     NumberStars = table.Column<short>(type: "INTEGER", nullable: true),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),

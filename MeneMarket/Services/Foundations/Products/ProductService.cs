@@ -15,8 +15,8 @@ namespace MeneMarket.Services.Foundations.Products
         public async ValueTask<Product> AddProductAsync(Product product) =>
             await this.storageBroker.InsertProductAsync(product);
 
-        public Task<List<Product>> RetrieveAllProducts() =>
-            this.storageBroker.SelectAllProductsAsync();
+        public async Task<List<Product>> RetrieveAllProductsAsync() =>
+            await this.storageBroker.SelectAllProductsAsync();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.storageBroker.SelectProductByIdAsync(id);
@@ -24,12 +24,7 @@ namespace MeneMarket.Services.Foundations.Products
         public async ValueTask<Product> ModifyProductAsync(Product product) =>
             await this.storageBroker.UpdateProductAsync(product);
 
-        public async ValueTask<Product> RemoveProductAsync(Guid id)
-        {
-            Product product =
-                await this.storageBroker.SelectProductByIdAsync(id);
-
-            return await this.storageBroker.DeleteProductAsync(product);
-        }
+        public async ValueTask<Product> RemoveProductAsync(Product product) =>
+             await this.storageBroker.DeleteProductAsync(product);
     }
 }

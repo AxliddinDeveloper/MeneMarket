@@ -6,9 +6,9 @@ namespace MeneMarket.Models.Foundations.Products
     {
         public Guid ProductId { get; set; }
         public string Description { get; set; }
-        public string Brand { get; set; }
+        public string? Brand { get; set; }
         public long LastPrice { get; set; }
-        public long? NewPrice { get; set; }
+        public long? ScidPrice { get; set; }
         public short? NumberSold { get; set; }
         public short? NumberStars { get; set; }
         public bool IsArchived { get; set; }

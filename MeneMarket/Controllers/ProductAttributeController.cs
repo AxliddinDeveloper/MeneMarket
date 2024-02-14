@@ -39,7 +39,7 @@ namespace MeneMarket.Controllers
             await this.productAttributeService.ModifyProductAttributeAsync(productAttribute);
 
         [HttpDelete]
-        public async ValueTask<ActionResult<ProductAttribute>> DeleteProductAttributeAsync(Guid id) =>
-            await this.productAttributeService.RemoveProductAttributeAsync(id);
+        public async ValueTask<ActionResult<ProductAttribute>> DeleteProductAttributeAsync(ProductAttribute productAttribute) =>
+            await this.productAttributeService.RemoveProductAttributeAsync(productAttribute);
     }
 }
