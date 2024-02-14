@@ -21,6 +21,28 @@ namespace MeneMarket.Migrations
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Clients.Client", b =>
+                {
+                    b.Property<Guid>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OfferLinkId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("StatusType")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ClientId");
+
+                    b.HasIndex("OfferLinkId");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
                 {
                     b.Property<Guid>("Id")
@@ -47,6 +69,30 @@ namespace MeneMarket.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("ImageMetadatas");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
+                {
+                    b.Property<Guid>("OfferLinkId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("OfferLinkId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("OfferLinks");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
@@ -77,6 +123,34 @@ namespace MeneMarket.Migrations
                     b.ToTable("ProductAttributes");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductRequests.ProductRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserPhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserRegion")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductRequests");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -92,14 +166,17 @@ namespace MeneMarket.Migrations
                     b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("LastPrice")
-                        .HasColumnType("INTEGER");
-
                     b.Property<short?>("NumberSold")
                         .HasColumnType("INTEGER");
 
                     b.Property<short?>("NumberStars")
                         .HasColumnType("INTEGER");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ProductOwner")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ProductType")
                         .HasColumnType("INTEGER");
@@ -117,6 +194,9 @@ namespace MeneMarket.Migrations
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
+
+                    b.Property<long>("Balance")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -141,6 +221,17 @@ namespace MeneMarket.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Clients.Client", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.OfferLinks.OfferLink", "OfferLink")
+                        .WithMany("Clients")
+                        .HasForeignKey("OfferLinkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OfferLink");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -148,6 +239,25 @@ namespace MeneMarket.Migrations
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany("OfferLinks")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeneMarket.Models.Foundations.Users.User", "User")
+                        .WithMany("OfferLinks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
@@ -161,11 +271,34 @@ namespace MeneMarket.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductRequests.ProductRequest", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
+                {
+                    b.Navigation("Clients");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
                     b.Navigation("ImageMetadatas");
 
+                    b.Navigation("OfferLinks");
+
                     b.Navigation("ProductAttributes");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>
+                {
+                    b.Navigation("OfferLinks");
                 });
 #pragma warning restore 612, 618
         }

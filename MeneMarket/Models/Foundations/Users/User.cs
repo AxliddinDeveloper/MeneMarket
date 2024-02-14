@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MeneMarket.Models.Foundations.OfferLinks;
 
 namespace MeneMarket.Models.Foundations.Users
 {
@@ -10,7 +11,9 @@ namespace MeneMarket.Models.Foundations.Users
         [EmailAddress]
         public string Email { get; set; }
         public string Password { get; set; }
+        public long Balance { get; set; }
         public bool IsArchived {  get; set; }
         public Role Role { get; set; }
+        public virtual ICollection<OfferLink> OfferLinks  { get; set; }
     }
 }

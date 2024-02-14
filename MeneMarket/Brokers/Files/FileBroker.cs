@@ -6,7 +6,7 @@
             MemoryStream memoryStream, string fileName, string uploadsFolder)
         {
             string filePath = Path.Combine(uploadsFolder, fileName);
-            var relativePath = Path.Combine("images", fileName);
+            var relativePath = Path.Combine("imageFiles", fileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {

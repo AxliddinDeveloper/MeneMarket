@@ -16,7 +16,7 @@ namespace MeneMarket.Services.Processings.Files
             string fileName)
         {
             var uploadsFolder =
-                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imageFiles");
 
             if (!Directory.Exists(uploadsFolder))
             {
@@ -28,7 +28,7 @@ namespace MeneMarket.Services.Processings.Files
 
         public string DeleteImageFile(string imageName)
         {
-            string filePath = Path.Combine("wwwroot\\images", imageName);
+            string filePath = Path.Combine("wwwroot\\imageFiles", imageName);
 
             if (System.IO.File.Exists(filePath))
             {
