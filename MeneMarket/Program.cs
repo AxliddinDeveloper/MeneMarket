@@ -1,3 +1,4 @@
+using System.Text;
 using MeneMarket.Brokers.Files;
 using MeneMarket.Brokers.Storages;
 using MeneMarket.Services.Foundations.Clients;
@@ -15,17 +16,49 @@ using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Images;
 using MeneMarket.Services.Processings.Products;
 using MeneMarket.Services.Processings.Users;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Standart Authorization header using the Bearer scheme (\"bearer {token}\")",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("Jwt:Key").Value)),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        });
+
+builder.Services.AddAuthorization();
 builder.Services.AddDbContext<StorageBroker>();
 AddProcessingServices(builder);
 AddOrchestrationServices(builder);
-AddBrokers(builder);
 AddFoundationServices(builder);
+AddBrokers(builder);
 
 static void AddBrokers(WebApplicationBuilder builder)
 {
@@ -70,6 +103,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseAuthentication();
 app.MapControllers();
 app.UseStaticFiles();
 
