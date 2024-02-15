@@ -20,10 +20,10 @@ namespace MeneMarket.Services.Orchestrations.Products
             await this.productProcessingService.RetrieveAllProductsAsync();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
-            await this.RetrieveProductByIdAsync(id);
+            await this.productProcessingService.RetrieveProductByIdAsync(id);
 
         public async ValueTask<Product> ModifyProductAsync(Product product) => 
-            await this.ModifyProductAsync(product);
+            await this.productProcessingService.ModifyProductAsync(product);
 
         public async ValueTask<Product> RemoveProductAsync(Guid id) =>
             await this.productProcessingService.RemoveProductByIdAsync(id);

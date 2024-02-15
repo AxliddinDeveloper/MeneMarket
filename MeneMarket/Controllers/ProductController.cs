@@ -1,6 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.Products;
-using MeneMarket.Services.Foundations.Products;
 using MeneMarket.Services.Orchestrations.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -10,35 +10,31 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class ProductController : RESTFulController
     {
-        private readonly IProductService productService;
         private readonly IProductOrchestrationService productOrchestrationService;
 
         public ProductController(
-            IProductService productService, 
-            IProductOrchestrationService productOrchestrationService)
-        {
-            this.productService = productService;
-            this.productOrchestrationService = productOrchestrationService;
-        }
+            IProductOrchestrationService productOrchestrationService) =>
+                this.productOrchestrationService = productOrchestrationService;
 
         [HttpPost]
         public async ValueTask<ActionResult<Product>> PostProductAsync(Product product) =>
             await this.productOrchestrationService.AddProductAsync(product);
 
         [HttpGet]
+        [Authorize]
         public async  Task<List<Product>> GelAllProducts() =>
-                 await this.productService.RetrieveAllProductsAsync();
+                 await this.productOrchestrationService.RetrieveAllProducts();
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<Product>> GetProductByIdAsync(Guid id) =>
-            await this.productService.RetrieveProductByIdAsync(id);
+            await this.productOrchestrationService.RetrieveProductByIdAsync(id);
 
         [HttpPut]
         public async ValueTask<ActionResult<Product>> PutProduct(Product product) =>
-            await this.productService.ModifyProductAsync(product);
+            await this.productOrchestrationService.ModifyProductAsync(product);
         
         [HttpDelete]
-        public async ValueTask<ActionResult<Product>> DeleteProduct(Product product) =>
-            await this.productService.RemoveProductAsync(product);
+        public async ValueTask<ActionResult<Product>> DeleteProduct(Guid id) =>
+            await this.productOrchestrationService.RemoveProductAsync(id);
     }
 }

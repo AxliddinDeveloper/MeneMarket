@@ -1,6 +1,7 @@
 using System.Text;
 using MeneMarket.Brokers.Files;
 using MeneMarket.Brokers.Storages;
+using MeneMarket.Brokers.Tokens;
 using MeneMarket.Services.Foundations.Clients;
 using MeneMarket.Services.Foundations.Files;
 using MeneMarket.Services.Foundations.ImageMetadatas;
@@ -8,6 +9,7 @@ using MeneMarket.Services.Foundations.OfferLinks;
 using MeneMarket.Services.Foundations.ProductAttributes;
 using MeneMarket.Services.Foundations.ProductRequests;
 using MeneMarket.Services.Foundations.Products;
+using MeneMarket.Services.Foundations.Tokens;
 using MeneMarket.Services.Foundations.Users;
 using MeneMarket.Services.Orchestrations.Images;
 using MeneMarket.Services.Orchestrations.Products;
@@ -64,11 +66,13 @@ static void AddBrokers(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<IStorageBroker, StorageBroker>();
     builder.Services.AddTransient<IFileBroker, FileBroker>();
+    builder.Services.AddTransient<ITokenBroker, TokenBroker>();
 }
 
 static void AddFoundationServices(WebApplicationBuilder builder)
 {
     builder.Services.AddTransient<IFileService, FileService>();
+    builder.Services.AddTransient<ITokenService, TokenService>();
     builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
     builder.Services.AddTransient<IClientService, ClientService>();
     builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
@@ -88,7 +92,7 @@ static void AddProcessingServices(WebApplicationBuilder builder)
 
 static void AddOrchestrationServices(WebApplicationBuilder builder)
 {
-    builder.Services.AddTransient<IUserOrchestrationService, UserOrchestrationService>();
+    builder.Services.AddTransient<IUserSecurityOrchestrationService, UserSecurityOrchestrationService>();
     builder.Services.AddTransient<IImageOrchestrationService, ImageOrchestrationService>();
     builder.Services.AddTransient<IProductOrchestrationService, ProductOrchestrationService>();
 }
@@ -101,9 +105,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
 app.UseAuthentication();
+app.UseAuthorization();
+app.UseHttpsRedirection();
 app.MapControllers();
 app.UseStaticFiles();
 

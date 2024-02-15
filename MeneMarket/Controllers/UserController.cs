@@ -1,5 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Users;
-using MeneMarket.Services.Orchestrations.Users;
+using MeneMarket.Services.Processings.Users;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -9,35 +9,30 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class UserController : RESTFulController
     {
-        private readonly IUserOrchestrationService userOrchestrationService;
+        private readonly IUserProcessingService userProcessingService;
 
-        public UserController(
-            IUserOrchestrationService userOrchestrationService) =>
-                this.userOrchestrationService = userOrchestrationService;
-
-        [HttpPost]
-        public async ValueTask<ActionResult<User>> PostUser(User user) =>
-            await this.userOrchestrationService.AddUserAsync(user);
+        public UserController(IUserProcessingService userProcessingService) =>
+            this.userProcessingService = userProcessingService;
 
         [HttpGet]
         public ActionResult<IQueryable<User>> GelAllUsers()
         {
             IQueryable<User> allUserss =
-                this.userOrchestrationService.RetrieveAllUsers();
+                this.userProcessingService.RetrieveAllUsers();
 
             return Ok(allUserss);
         }
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<User>> GetUserByIdAsync(Guid id) =>
-            await this.userOrchestrationService.RetrieveUserByIdAsync(id);
+            await this.userProcessingService.RetrieveUserByIdAsync(id);
 
         [HttpPut]
         public async ValueTask<ActionResult<User>> PutHome(User user) =>
-            await this.userOrchestrationService.ModifyUserAsync(user);
+            await this.userProcessingService.ModifyUserAsync(user);
 
         [HttpDelete]
         public async ValueTask<ActionResult<User>> DeleteUser(Guid id) =>
-            await this.userOrchestrationService.RemoveUserAsync(id);
+            await this.userProcessingService.RemoveUserByIdAsync(id);
     }
 }

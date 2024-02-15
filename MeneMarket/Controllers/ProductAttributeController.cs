@@ -12,10 +12,8 @@ namespace MeneMarket.Controllers
         private readonly IProductAttributeService productAttributeService;
 
         public ProductAttributeController(
-            IProductAttributeService productAttributeService)
-        {
-            this.productAttributeService = productAttributeService;
-        }
+            IProductAttributeService productAttributeService) =>
+                this.productAttributeService = productAttributeService;
 
         [HttpPost]
         public async ValueTask<ActionResult<ProductAttribute>> PostProductAttributeAsync(ProductAttribute productAttribute) =>

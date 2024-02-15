@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MeneMarket.Brokers.Tokens
 {
-    public class TokenBroker
+    public class TokenBroker : ITokenBroker
     {
         private readonly IConfiguration configuration;
 
@@ -20,7 +20,6 @@ namespace MeneMarket.Brokers.Tokens
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim(ClaimTypes.Email,user.Email),
                 new Claim(ClaimTypes.Role,user.Role.ToString()),
             };
