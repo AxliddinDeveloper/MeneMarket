@@ -15,8 +15,8 @@ namespace MeneMarket.Services.Foundations.OfferLinks
         public async ValueTask<OfferLink> AddOfferLinkAsync(OfferLink offerLink) =>
             await this.storageBroker.InsertOfferLinkAsync(offerLink);
 
-        public IQueryable<OfferLink> RetrieveAllOfferLinks() =>
-            this.storageBroker.SelectAllOfferLinks();
+        public Task<List<OfferLink>> RetrieveAllOfferLinksAsync() =>
+            this.storageBroker.SelectAllOfferLinksAsync();
 
         public async ValueTask<OfferLink> RetrieveOfferLinkByIdAsync(Guid id) =>
             await this.storageBroker.SelectOfferLinkByIdAsync(id);

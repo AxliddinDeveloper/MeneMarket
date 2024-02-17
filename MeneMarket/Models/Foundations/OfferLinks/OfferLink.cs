@@ -10,6 +10,8 @@ namespace MeneMarket.Models.Foundations.OfferLinks
         public Guid OfferLinkId { get; set; }
         public string Name { get; set; }
         public string Link {  get; set; }
+        public bool AllowDonation { get; set; }
+        public long? DonationPrice { get; set; }
         public Guid ProductId { get; set; }
         [JsonIgnore]
         public virtual Product Product { get; set; }

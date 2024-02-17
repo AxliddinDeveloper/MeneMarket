@@ -9,9 +9,9 @@ namespace MeneMarket.Models.Foundations.Products
         public Guid ProductId { get; set; }
         public string Description { get; set; }
         public string? Brand { get; set; }
-        public long Price { get; set; }
-        public long? AdvertisingPrice { get; set; }
-        public long? ScidPrice { get; set; }
+        public decimal Price { get; set; }
+        public decimal? ScidPrice { get; set; }
+        public decimal? AdvertisingPrice { get; set; }
         public short? NumberSold { get; set; }
         public short? NumberStars { get; set; }
         public string? ProductOwner { get; set; }

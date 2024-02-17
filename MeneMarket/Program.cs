@@ -3,6 +3,7 @@ using MeneMarket.Brokers.Files;
 using MeneMarket.Brokers.Storages;
 using MeneMarket.Brokers.Tokens;
 using MeneMarket.Services.Foundations.Clients;
+using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
 using MeneMarket.Services.Foundations.ImageMetadatas;
 using MeneMarket.Services.Foundations.OfferLinks;
@@ -71,15 +72,16 @@ static void AddBrokers(WebApplicationBuilder builder)
 
 static void AddFoundationServices(WebApplicationBuilder builder)
 {
-    builder.Services.AddTransient<IFileService, FileService>();
-    builder.Services.AddTransient<ITokenService, TokenService>();
-    builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
     builder.Services.AddTransient<IClientService, ClientService>();
-    builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
-    builder.Services.AddTransient<IUserService, UserService>();
-    builder.Services.AddTransient<IProductService, ProductService>();
+    builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();
+    builder.Services.AddTransient<IFileService, FileService>();
     builder.Services.AddTransient<IImageMetadataService, ImageMetadataService>();
+    builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
     builder.Services.AddTransient<IProductAttributeService, ProductAttributeService>();
+    builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
+    builder.Services.AddTransient<IProductService, ProductService>();
+    builder.Services.AddTransient<ITokenService, TokenService>();
+    builder.Services.AddTransient<IUserService, UserService>();
 }
 
 static void AddProcessingServices(WebApplicationBuilder builder)
