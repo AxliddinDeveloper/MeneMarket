@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Brokers.Storages;
 using MeneMarket.Models.Foundations.ProductAttributes;
+using RESTFulSense.Exceptions;
 
 namespace MeneMarket.Services.Foundations.ProductAttributes
 {
@@ -24,7 +25,12 @@ namespace MeneMarket.Services.Foundations.ProductAttributes
         public async ValueTask<ProductAttribute> ModifyProductAttributeAsync(ProductAttribute PoductAttribute) =>
             await this.storageBroker.UpdateProductAttributeAsync(PoductAttribute);
 
-        public async ValueTask<ProductAttribute> RemoveProductAttributeAsync(ProductAttribute productAttribute) =>
-             await this.storageBroker.DeleteProductAttributeAsync(productAttribute);
+        public async ValueTask<ProductAttribute> RemoveProductAttributeAsync(Guid id)
+        {
+            ProductAttribute mayBeProductAttribute =
+                await this.storageBroker.SelectProductAttributeByIdAsync(id);
+
+             return await this.storageBroker.DeleteProductAttributeAsync(mayBeProductAttribute);
+        }
     }
 }

@@ -27,12 +27,7 @@ namespace MeneMarket.Services.Processings.Products
         public async ValueTask<Product> ModifyProductAsync(Product product) =>
             await this.productService.ModifyProductAsync(product);
 
-        public async ValueTask<Product> RemoveProductByIdAsync(Guid id)
-        {
-            Product selectProduct =
-                await this.RetrieveProductByIdAsync(id);
-
-            return await this.productService.RemoveProductAsync(selectProduct);
-        }
+        public async ValueTask<Product> RemoveProductByIdAsync(Guid id) =>
+            await this.productService.RemoveProductAsync(id);
     }
 }

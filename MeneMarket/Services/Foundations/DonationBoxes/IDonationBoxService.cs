@@ -5,7 +5,7 @@ namespace MeneMarket.Services.Foundations.DonationBoxes
     public interface IDonationBoxService
     {
         ValueTask<DonationBox> AddDonationBoxAsync(DonationBox donationBox);
-        Task<List<DonationBox>> RetrieveAllDonationBoxesAsync();
+        IQueryable<DonationBox> RetrieveAllDonationBoxes();
         ValueTask<DonationBox> RetrieveDonationBoxByIdAsync(Guid id);
         ValueTask<DonationBox> ModifyDonationBoxAsync(DonationBox donationBox);
         ValueTask<DonationBox> RemoveDonationBoxAsync(Guid id);

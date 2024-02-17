@@ -8,6 +8,6 @@ namespace MeneMarket.Services.Foundations.Users
         IQueryable<User> RetrieveAllUsers();
         ValueTask<User> RetrieveUserByIdAsync(Guid id);
         ValueTask<User> ModifyUserAsync(User user);
-        ValueTask<User> RemoveUserAsync(User user);
+        ValueTask<User> RemoveUserAsync(Guid id);
     }
 }

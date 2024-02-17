@@ -18,8 +18,13 @@ namespace MeneMarket.Services.Foundations.ProductRequests
         public async ValueTask<ProductRequest> ModifyProductRequestAsync(ProductRequest productRequest) =>
             await this.storageBroker.UpdateProductRequestAsync(productRequest);
 
-        public async ValueTask<ProductRequest> RemoveProductRequestAsync(ProductRequest productRequest) =>
-            await this.storageBroker.DeleteProductRequestAsync(productRequest);
+        public async ValueTask<ProductRequest> RemoveProductRequestAsync(Guid id)
+        {
+            ProductRequest mayBeProductRequest = 
+                await this.storageBroker.SelectProductRequestByIdAsync(id);
+
+            return await this.storageBroker.DeleteProductRequestAsync(mayBeProductRequest);
+        }
 
         public IQueryable<ProductRequest> RetrieveAllProductRequests() =>
             this.storageBroker.SelectAllProductRequests();

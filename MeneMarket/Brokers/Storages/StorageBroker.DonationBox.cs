@@ -10,15 +10,15 @@ namespace MeneMarket.Brokers.Storages
         public async ValueTask<DonationBox> InsertDonationBoxAsync(DonationBox donationBox) =>
             await InsertAsync(donationBox);
 
-        public async Task<List<DonationBox>> SelectAllDonationBoxesAsync()
+        public IQueryable<DonationBox> SelectAllDonationBoxes() =>
+            this.SelectAll<DonationBox>();
+
+        public async ValueTask<DonationBox> SelectDonationBoxByIdAsync(Guid id)
         {
             return await this.Donations
-                .Include(p => p.DonatedUsers)
-                .ToListAsync();
+                .Include(d => d.DonatedUsers)
+                .FirstOrDefaultAsync(d => d.DonationBoxId == id);
         }
-
-        public async ValueTask<DonationBox> SelectDonationBoxByIdAsync(Guid id) =>
-            await SelectAsync<DonationBox>(id);
 
         public async ValueTask<DonationBox> UpdateDonationBoxAsync(DonationBox donationBox) =>
             await UpdateAsync(donationBox);

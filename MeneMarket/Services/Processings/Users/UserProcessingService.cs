@@ -25,12 +25,7 @@ namespace MeneMarket.Services.Processings.Users
         public async ValueTask<User> ModifyUserAsync(User user) =>
             await this.userService.ModifyUserAsync(user);
 
-        public async ValueTask<User> RemoveUserByIdAsync(Guid id)
-        {
-            var mayBeUser =
-                await this.userService.RetrieveUserByIdAsync(id);
-
-            return await this.userService.RemoveUserAsync(mayBeUser);
-        }
+        public async ValueTask<User> RemoveUserByIdAsync(Guid id) =>
+            await this.userService.RemoveUserAsync(id);
     }
 }

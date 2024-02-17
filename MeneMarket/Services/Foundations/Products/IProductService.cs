@@ -8,6 +8,6 @@ namespace MeneMarket.Services.Foundations.Products
         Task<List<Product>> RetrieveAllProductsAsync();
         ValueTask<Product> RetrieveProductByIdAsync(Guid id);
         ValueTask<Product> ModifyProductAsync(Product product);
-        ValueTask<Product> RemoveProductAsync(Product product);
+        ValueTask<Product> RemoveProductAsync(Guid id);
     }
 }
