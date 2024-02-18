@@ -26,7 +26,8 @@ namespace MeneMarket.Services.Foundations.Users
 
         public async ValueTask<User> RemoveUserAsync(Guid id)
         {
-            User mayBeUser = await this.storageBroker.SelectUserByIdAsync(id);
+            User mayBeUser = 
+                await this.storageBroker.SelectUserByIdAsync(id);
 
               return await this.storageBroker.DeleteUserAsync(mayBeUser);
         } 

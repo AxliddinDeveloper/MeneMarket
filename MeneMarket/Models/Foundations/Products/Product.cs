@@ -8,13 +8,13 @@ namespace MeneMarket.Models.Foundations.Products
     {
         public Guid ProductId { get; set; }
         public string Description { get; set; }
-        public string? Brand { get; set; }
+        public string Brand { get; set; }
         public decimal Price { get; set; }
-        public decimal? ScidPrice { get; set; }
-        public decimal? AdvertisingPrice { get; set; }
-        public short? NumberSold { get; set; }
-        public short? NumberStars { get; set; }
-        public string? ProductOwner { get; set; }
+        public decimal ScidPrice { get; set; }
+        public decimal AdvertisingPrice { get; set; }
+        public short NumberSold { get; set; }
+        public short NumberStars { get; set; }
+        public string ProductOwner { get; set; }
         public bool IsArchived { get; set; }
         public ProductType ProductType { get; set; }
         public virtual ICollection<ImageMetadata> ImageMetadatas { get; set; }

@@ -1,13 +1,13 @@
 ﻿using MeneMarket.Models.Foundations.Clients;
 
-namespace MeneMarket.Services.Foundations.Clients
+namespace MeneMarket.Services.Orchestrations.Clients
 {
-    public interface IClientService
+    public interface IClientOrchestrationService
     {
-        ValueTask<Client> AddClientAsync(Client client);
+        ValueTask<string> AddClientAsync(Guid id, string ipAddress);
         IQueryable<Client> RetrieveAllClients();
         ValueTask<Client> RetrieveClientByIdAsync(Guid id);
         ValueTask<Client> ModifyClientAsync(Client client);
-        ValueTask<Client> RemoveClientAsync(Guid id);
+        ValueTask<Client> RemoveClientByIdAsync(Guid id);
     }
 }

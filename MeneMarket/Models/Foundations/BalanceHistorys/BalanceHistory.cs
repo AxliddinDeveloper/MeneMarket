@@ -6,7 +6,7 @@ namespace MeneMarket.Models.Foundations.BalanceHistorys
     public class BalanceHistory
     {
         public Guid Id { get; set; }
-        public decimal Amount {  get; set; }
+        public string Amount {  get; set; }
         public DateTime TransactionDate { get; set; }
         public Guid UserId { get; set; }
         [JsonIgnore]

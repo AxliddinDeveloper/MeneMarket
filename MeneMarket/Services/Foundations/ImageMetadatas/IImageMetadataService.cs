@@ -8,6 +8,6 @@ namespace MeneMarket.Services.Foundations.ImageMetadatas
         IQueryable<ImageMetadata> RetrieveAllImageMetadatas();
         ValueTask<ImageMetadata> RetrieveImageMetadataByIdAsync(Guid id);
         ValueTask<ImageMetadata> ModifyImageMetadataAsync(ImageMetadata imageMetadata);
-        ValueTask<ImageMetadata> RemoveImageMetadataAsync(ImageMetadata imageMetadata);
+        ValueTask<ImageMetadata> RemoveImageMetadataAsync(Guid id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.OfferLinks;
+using MeneMarket.Models.Foundations.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeneMarket.Brokers.Storages
@@ -17,8 +18,12 @@ namespace MeneMarket.Brokers.Storages
                 .ToListAsync();
         }
 
-        public async ValueTask<OfferLink> SelectOfferLinkByIdAsync(Guid id) =>
-            await SelectAsync<OfferLink>(id);
+        public async ValueTask<OfferLink> SelectOfferLinkByIdAsync(Guid id)
+        {
+            return await this.OfferLinks
+               .Include(u => u.Clients)
+              .FirstOrDefaultAsync(u => u.OfferLinkId == id);
+        }
 
         public async ValueTask<OfferLink> UpdateOfferLinkAsync(OfferLink offerLink) =>
             await UpdateAsync(offerLink);

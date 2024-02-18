@@ -2,6 +2,7 @@ using System.Text;
 using MeneMarket.Brokers.Files;
 using MeneMarket.Brokers.Storages;
 using MeneMarket.Brokers.Tokens;
+using MeneMarket.Services.Foundations.BalanceHistorys;
 using MeneMarket.Services.Foundations.Clients;
 using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
@@ -12,9 +13,13 @@ using MeneMarket.Services.Foundations.ProductRequests;
 using MeneMarket.Services.Foundations.Products;
 using MeneMarket.Services.Foundations.Tokens;
 using MeneMarket.Services.Foundations.Users;
+using MeneMarket.Services.Orchestrations.Clients;
+using MeneMarket.Services.Orchestrations.DonationBoxes;
 using MeneMarket.Services.Orchestrations.Images;
-using MeneMarket.Services.Orchestrations.Products;
+using MeneMarket.Services.Orchestrations.ProductRequests;
 using MeneMarket.Services.Orchestrations.Users;
+using MeneMarket.Services.Processings.BalanceHistorys;
+using MeneMarket.Services.Processings.DonationBoxes;
 using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Images;
 using MeneMarket.Services.Processings.Products;
@@ -25,7 +30,6 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors();
@@ -72,6 +76,7 @@ static void AddBrokers(WebApplicationBuilder builder)
 
 static void AddFoundationServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IBalanceHistoryService, BalanceHistoryService>();
     builder.Services.AddTransient<IClientService, ClientService>();
     builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();
     builder.Services.AddTransient<IFileService, FileService>();
@@ -86,6 +91,8 @@ static void AddFoundationServices(WebApplicationBuilder builder)
 
 static void AddProcessingServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IDonationBoxProcessingService, DonationBoxProcessingService>();
+    builder.Services.AddTransient<IBalanceHistoryProcessingService, BalanceHistoryProcessingService>();
     builder.Services.AddTransient<IFileProcessingService, FileProcessingService>();
     builder.Services.AddTransient<IUserProcessingService, UserProcessingService>();
     builder.Services.AddTransient<IProductProcessingService, ProductProcessingService>();
@@ -94,9 +101,12 @@ static void AddProcessingServices(WebApplicationBuilder builder)
 
 static void AddOrchestrationServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IClientOrchestrationService,  ClientOrchestrationService>();
+    builder.Services.AddTransient<IDonationBoxOrchestrationService, DonationBoxOrchestrationService>();
+    builder.Services.AddTransient<IProductRequestOrchestrationService, ProductRequestOrchestrationService>();
+    builder.Services.AddTransient<IUserOrchestrationService, UserOrchestrationService>();
     builder.Services.AddTransient<IUserSecurityOrchestrationService, UserSecurityOrchestrationService>();
     builder.Services.AddTransient<IImageOrchestrationService, ImageOrchestrationService>();
-    builder.Services.AddTransient<IProductOrchestrationService, ProductOrchestrationService>();
 }
 
 var app = builder.Build();

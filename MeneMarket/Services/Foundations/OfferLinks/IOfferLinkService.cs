@@ -8,6 +8,6 @@ namespace MeneMarket.Services.Foundations.OfferLinks
         Task<List<OfferLink>> RetrieveAllOfferLinksAsync();
         ValueTask<OfferLink> RetrieveOfferLinkByIdAsync(Guid id);
         ValueTask<OfferLink> ModifyOfferLinkAsync(OfferLink offerLink);
-        ValueTask<OfferLink> RemoveOfferLinkAsync(OfferLink offerLink);
+        ValueTask<OfferLink> RemoveOfferLinkAsync(Guid id);
     }
 }

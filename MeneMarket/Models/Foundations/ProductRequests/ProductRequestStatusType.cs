@@ -1,6 +1,6 @@
 ﻿namespace MeneMarket.Models.Foundations.ProductRequests
 {
-    public enum StatusType
+    public enum ProductRequestStatusType
     {
         Accepted,
         Delivering,

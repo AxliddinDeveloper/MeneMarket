@@ -18,8 +18,13 @@ namespace MeneMarket.Services.Foundations.Clients
         public async ValueTask<Client> ModifyClientAsync(Client client) =>
             await this.storageBroker.UpdateClientAsync(client);
 
-        public async ValueTask<Client> RemoveClientAsync(Client client) =>
-            await this.storageBroker.DeleteClientAsync(client);
+        public async ValueTask<Client> RemoveClientAsync(Guid id)
+        {
+            Client selectedClient = 
+                await this.storageBroker.SelectClientByIdAsync(id);
+
+            return await this.storageBroker.DeleteClientAsync(selectedClient);
+        }
 
         public IQueryable<Client> RetrieveAllClients() =>
             this.RetrieveAllClients();

@@ -25,12 +25,7 @@ namespace MeneMarket.Services.Processings.Images
         public async ValueTask<ImageMetadata> ModifyImageMetadataAsync(ImageMetadata imageMetadata) =>
             await this.imageMetadataService.ModifyImageMetadataAsync(imageMetadata);
 
-        public async ValueTask<ImageMetadata> RemoveImageMetadataByIdAsync(Guid id)
-        {
-            ImageMetadata imageMetadata =
-                await this.imageMetadataService.RetrieveImageMetadataByIdAsync(id);
-
-            return await this.imageMetadataService.RemoveImageMetadataAsync(imageMetadata);
-        }
+        public async ValueTask<ImageMetadata> RemoveImageMetadataByIdAsync(Guid id) =>
+             await this.imageMetadataService.RemoveImageMetadataAsync(id);
     }
 }

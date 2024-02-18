@@ -24,7 +24,11 @@ namespace MeneMarket.Services.Foundations.OfferLinks
         public async ValueTask<OfferLink> ModifyOfferLinkAsync(OfferLink offerLink) =>
             await this.storageBroker.UpdateOfferLinkAsync(offerLink);
 
-        public async ValueTask<OfferLink> RemoveOfferLinkAsync(OfferLink offerLink) =>
-            await this.storageBroker.DeleteOfferLinkAsync(offerLink);
+        public async ValueTask<OfferLink> RemoveOfferLinkAsync(Guid id)
+        {
+            var selectedOfferLink = await this.storageBroker.SelectOfferLinkByIdAsync(id);
+
+           return  await this.storageBroker.DeleteOfferLinkAsync(selectedOfferLink);
+        }
     }
 }
