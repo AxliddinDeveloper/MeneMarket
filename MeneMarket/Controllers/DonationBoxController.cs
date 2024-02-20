@@ -1,5 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.DonationBoxes;
-using MeneMarket.Services.Processings.DonationBoxes;
+using MeneMarket.Services.Orchestrations.DonationBoxes;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -9,36 +9,32 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class DonationBoxController : RESTFulController
     {
-        private readonly IDonationBoxProcessingService donationBoxProcessingService;
+        private readonly IDonationBoxOrchestrationService donationBoxOrchestrationService;
 
-        public DonationBoxController(IDonationBoxProcessingService donationBoxProcessingService)
+        public DonationBoxController(IDonationBoxOrchestrationService donationBoxOrchestrationService)
         {
-            this.donationBoxProcessingService = donationBoxProcessingService;
+            this.donationBoxOrchestrationService = donationBoxOrchestrationService;
         }
 
         [HttpPost]
         public async ValueTask<ActionResult<DonationBox>> PostDonationBoxAsync(DonationBox donationBox) =>
-            await this.donationBoxProcessingService.AddDonationBoxAsync(donationBox);
+            await this.donationBoxOrchestrationService.AddDonationBoxAsync(donationBox);
 
         [HttpGet]
         public ActionResult<IQueryable<DonationBox>> GelAllDonationBoxs()
         {
             IQueryable<DonationBox> allUDonationBoxs =
-                this.donationBoxProcessingService.RetrieveAllDonationBoxs();
+                this.donationBoxOrchestrationService.RetrieveAllDonationBoxes();
 
             return Ok(allUDonationBoxs);
         }
-
         [HttpGet("ById")]
         public async ValueTask<ActionResult<DonationBox>> GetDonationBoxByIdAsync(Guid id) =>
-            await this.donationBoxProcessingService.RetrieveDonationBoxByIdAsync(id);
+            await this.donationBoxOrchestrationService.RetrieveDonationBoxByIdAsync(id);
 
-        [HttpPut]
-        public async ValueTask<ActionResult<DonationBox>> PutDonationBoxAsync(DonationBox donationBox) =>
-            await this.donationBoxProcessingService.ModifyDonationBoxAsync(donationBox);
 
         [HttpDelete]
         public async ValueTask<ActionResult<DonationBox>> DeleteDonationBoxAsync(Guid id) =>
-            await this.donationBoxProcessingService.RemoveDonationBoxByIdAsync(id);
+            await this.donationBoxOrchestrationService.RemoveDonationBoxByIdAsync(id);
     }
 }

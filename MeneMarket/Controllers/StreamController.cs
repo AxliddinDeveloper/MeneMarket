@@ -25,7 +25,7 @@ namespace MeneMarket.Controllers
             var productLink = 
                 await this.clientOrchestrationService.AddClientAsync(id, ipAddress);
 
-            return Ok($"{productLink}");
+            return Ok(productLink);
         }
     }
 }

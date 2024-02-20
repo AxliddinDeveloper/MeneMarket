@@ -10,6 +10,12 @@ namespace MeneMarket.Controllers
     public class OfferLinkController : RESTFulController
     {
         private readonly IOfferLinkService offerLinkService;
+
+        public OfferLinkController(IOfferLinkService offerLinkService)
+        {
+            this.offerLinkService = offerLinkService;
+        }
+
         [HttpPost]
         public async ValueTask<ActionResult<OfferLink>> PostOfferLinkAsync(OfferLink offerLink) =>
             await this.offerLinkService.AddOfferLinkAsync(offerLink);

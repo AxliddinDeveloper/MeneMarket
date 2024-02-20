@@ -7,6 +7,10 @@ namespace MeneMarket.Services.Foundations.DonationBoxes
     {
         private readonly IStorageBroker storageBroker;
 
+        public DonationBoxService(IStorageBroker storageBroker)
+        {
+            this.storageBroker = storageBroker;
+        }
 
         public IQueryable<DonationBox> RetrieveAllDonationBoxes() =>
             this.storageBroker.SelectAllDonationBoxes();

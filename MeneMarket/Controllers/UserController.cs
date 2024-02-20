@@ -11,6 +11,11 @@ namespace MeneMarket.Controllers
     {
         private readonly IUserOrchestrationService userOrchestrationService;
 
+        public UserController(IUserOrchestrationService userOrchestrationService)
+        {
+            this.userOrchestrationService = userOrchestrationService;
+        }
+
         [HttpGet]
         public ActionResult<IQueryable<User>> GelAllUsers()
         {

@@ -6,6 +6,7 @@ using MeneMarket.Services.Foundations.Clients;
 using MeneMarket.Services.Foundations.OfferLinks;
 using MeneMarket.Services.Foundations.ProductRequests;
 using MeneMarket.Services.Orchestrations.DonationBoxes;
+using MeneMarket.Services.Processings.DonationBoxes;
 
 namespace MeneMarket.Services.Orchestrations.ProductRequests
 {
@@ -14,17 +15,20 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
         private readonly IProductRequestService productRequestService;
         private readonly IClientService clientService;
         private readonly IDonationBoxOrchestrationService donationBoxOrchestrationService;
+        private readonly IDonationBoxProcessingService donationBoxProcessingService;
         private readonly IOfferLinkService offerLinkService;
 
         public ProductRequestOrchestrationService(
             IProductRequestService productRequestService, 
             IClientService clientService, 
             IDonationBoxOrchestrationService donationBoxOrchestrationService, 
+            IDonationBoxProcessingService donationBoxProcessingService, 
             IOfferLinkService offerLinkService)
         {
             this.productRequestService = productRequestService;
             this.clientService = clientService;
             this.donationBoxOrchestrationService = donationBoxOrchestrationService;
+            this.donationBoxProcessingService = donationBoxProcessingService;
             this.offerLinkService = offerLinkService;
         }
 
@@ -83,7 +87,7 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
                 await this.clientService.ModifyClientAsync(client);
 
                 IQueryable<DonationBox> allDonationBoxes = 
-                    this.donationBoxOrchestrationService.RetrieveAllDonationBoxes();
+                    this.donationBoxProcessingService.RetrieveAllDonationBoxs();
 
                 var selectedDonationBox  = allDonationBoxes.FirstOrDefault(d =>
                 d.DonationBoxId == d.DonationBoxId);

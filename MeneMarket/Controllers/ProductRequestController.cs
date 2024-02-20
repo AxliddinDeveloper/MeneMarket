@@ -18,8 +18,14 @@ namespace MeneMarket.Controllers
         }
 
         [HttpPost]
-        public async ValueTask<ActionResult<ProductRequest>> PostProductRequestAsync(ProductRequest productRequest) =>
-            await this.productRequestOrchestrationService.AddProductRequestAsync(productRequest);
+        public async ValueTask<ActionResult<ProductRequest>> PostProductRequestAsync(ProductRequest productRequest)
+        {
+            var httpContext = HttpContext;
+            string ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
+            productRequest.IpAddress = ipAddress;
+
+            return await this.productRequestOrchestrationService.AddProductRequestAsync(productRequest);
+        }
 
         [HttpGet]
         public ActionResult<IQueryable<ProductRequest>> GelAllProductRequests()

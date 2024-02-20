@@ -27,7 +27,7 @@ namespace MeneMarket.Services.Foundations.Clients
         }
 
         public IQueryable<Client> RetrieveAllClients() =>
-            this.RetrieveAllClients();
+            this.storageBroker.SelectAllClients();
 
         public async ValueTask<Client> RetrieveClientByIdAsync(Guid id) =>
             await this.storageBroker.SelectClientByIdAsync(id);

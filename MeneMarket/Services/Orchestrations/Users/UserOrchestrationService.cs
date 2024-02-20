@@ -23,7 +23,7 @@ namespace MeneMarket.Services.Orchestrations.Users
             this.userProcessingService.RetrieveAllUsers();
 
         public async ValueTask<User> RetrieveUserByIdAsync(Guid id) =>
-            await this.RetrieveUserByIdAsync(id);
+            await this.userProcessingService.RetrieveUserByIdAsync(id);
 
         public async ValueTask<User> ModifyUserAsync(User user)
         {
