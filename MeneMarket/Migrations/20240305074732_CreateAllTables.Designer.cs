@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240218143620_CreateAll")]
-    partial class CreateAll
+    [Migration("20240305074732_CreateAllTables")]
+    partial class CreateAllTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,34 @@ namespace MeneMarket.Migrations
                     b.HasIndex("OfferLinkId");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quality")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", b =>
@@ -302,6 +330,17 @@ namespace MeneMarket.Migrations
                     b.Navigation("OfferLink");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Comments.Comment", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -375,6 +414,8 @@ namespace MeneMarket.Migrations
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("ImageMetadatas");
 
                     b.Navigation("OfferLinks");

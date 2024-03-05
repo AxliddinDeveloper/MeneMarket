@@ -15,6 +15,7 @@ namespace MeneMarket.Brokers.Storages
             return await this.Products
                 .Include(p => p.ProductAttributes)
                 .Include(p => p.ImageMetadatas)
+                .Include(p => p.ImageMetadatas)
                 .ToListAsync();
         }
 

@@ -65,6 +65,34 @@ namespace MeneMarket.Migrations
                     b.ToTable("Clients");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Comments.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IpAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quality")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", b =>
                 {
                     b.Property<Guid>("DonationBoxId")
@@ -299,6 +327,17 @@ namespace MeneMarket.Migrations
                     b.Navigation("OfferLink");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Comments.Comment", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -372,6 +411,8 @@ namespace MeneMarket.Migrations
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("ImageMetadatas");
 
                     b.Navigation("OfferLinks");

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MeneMarket.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateAll : Migration
+    public partial class CreateAllTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,28 @@ namespace MeneMarket.Migrations
                         column: x => x.DonationBoxId,
                         principalTable: "Donations",
                         principalColumn: "DonationBoxId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    IpAddress = table.Column<string>(type: "TEXT", nullable: true),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Quality = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -215,6 +237,11 @@ namespace MeneMarket.Migrations
                 column: "OfferLinkId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ProductId",
+                table: "Comments",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ImageMetadatas_ProductId",
                 table: "ImageMetadatas",
                 column: "ProductId");
@@ -253,6 +280,9 @@ namespace MeneMarket.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "ImageMetadatas");
