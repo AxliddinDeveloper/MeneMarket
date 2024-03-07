@@ -4,6 +4,7 @@ using MeneMarket.Brokers.Storages;
 using MeneMarket.Brokers.Tokens;
 using MeneMarket.Services.Foundations.BalanceHistorys;
 using MeneMarket.Services.Foundations.Clients;
+using MeneMarket.Services.Foundations.Comments;
 using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
 using MeneMarket.Services.Foundations.ImageMetadatas;
@@ -76,6 +77,7 @@ static void AddBrokers(WebApplicationBuilder builder)
 
 static void AddFoundationServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<ICommentService, CommentService>();
     builder.Services.AddTransient<IBalanceHistoryService, BalanceHistoryService>();
     builder.Services.AddTransient<IClientService, ClientService>();
     builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();

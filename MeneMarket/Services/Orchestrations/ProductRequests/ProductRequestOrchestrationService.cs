@@ -32,7 +32,8 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
             this.offerLinkService = offerLinkService;
         }
 
-        public async ValueTask<ProductRequest> AddProductRequestAsync(ProductRequest productRequest)
+        public async ValueTask<ProductRequest> AddProductRequestAsync(
+            ProductRequest productRequest)
         {
             IQueryable<Client> allClients = 
                 this.clientService.RetrieveAllClients();
@@ -62,7 +63,8 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
         public async ValueTask<ProductRequest> RetrieveProductRequestByIdAsync(Guid id) =>
             await this.productRequestService.RetrieveProductRequestByIdAsync(id);
 
-        public async ValueTask<ProductRequest> ModifyProductRequestAsync(ProductRequest productRequest)
+        public async ValueTask<ProductRequest> ModifyProductRequestAsync(
+            ProductRequest productRequest)
         {
             bool outbalance = true;
 
@@ -92,7 +94,8 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
                 var selectedDonationBox  = allDonationBoxes.FirstOrDefault(d =>
                 d.DonationBoxId == d.DonationBoxId);
 
-                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(selectedDonationBox, client.OfferLinkId, outbalance = false);
+                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
+                    selectedDonationBox, client.OfferLinkId, outbalance = false);
 
                 return await this.productRequestService.ModifyProductRequestAsync(productRequest);
             }
@@ -110,7 +113,8 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
                 var selectedDonationBox = allDonationBoxes.FirstOrDefault(d =>
                 d.DonationBoxId == d.DonationBoxId);
 
-                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(selectedDonationBox, client.OfferLinkId, outbalance);
+                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
+                    selectedDonationBox, client.OfferLinkId, outbalance);
 
                 return await this.productRequestService.ModifyProductRequestAsync(productRequest);
             }

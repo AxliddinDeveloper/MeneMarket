@@ -14,7 +14,7 @@ namespace MeneMarket.Services.Processings.Users
         }
 
         public async ValueTask<User> AddUserAsync(User user) =>
-    await this.userService.AddUserAsync(user);
+            await this.userService.AddUserAsync(user);
 
         public IQueryable<User> RetrieveAllUsers() =>
             this.userService.RetrieveAllUsers();

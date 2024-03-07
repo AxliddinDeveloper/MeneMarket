@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240305074732_CreateAllTables")]
+    [Migration("20240306050449_CreateAllTables")]
     partial class CreateAllTables
     {
         /// <inheritdoc />

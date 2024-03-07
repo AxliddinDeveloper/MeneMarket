@@ -1,6 +1,4 @@
 ﻿using MeneMarket.Models.Foundations.DonationBoxes;
-using MeneMarket.Models.Foundations.Products;
-using MeneMarket.Models.Foundations.Users;
 using MeneMarket.Services.Foundations.OfferLinks;
 using MeneMarket.Services.Orchestrations.Users;
 using MeneMarket.Services.Processings.DonationBoxes;
@@ -36,15 +34,17 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
         public async ValueTask<DonationBox> RetrieveDonationBoxByIdAsync(Guid id) =>
             await this.donationBoxProcessingService.RetrieveDonationBoxByIdAsync(id);
 
-        public async ValueTask<DonationBox> ModifyDonationBoxAsync(DonationBox donationBox, Guid id, bool outBalance)
+        public async ValueTask<DonationBox> ModifyDonationBoxAsync(
+            DonationBox donationBox, 
+            Guid id, bool outBalance)
         {
             var selectedOfferLink = 
                 await this.offerLinkService.RetrieveOfferLinkByIdAsync(id);
 
-            User selectedUser =
+            var selectedUser =
                 await this.userOrchestrationService.RetrieveUserByIdAsync(selectedOfferLink.UserId);
 
-            Product selectedProduct =
+            var selectedProduct =
                 await this.productProcessingService.RetrieveProductByIdAsync(selectedOfferLink.ProductId);
 
             if (selectedOfferLink == null)

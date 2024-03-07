@@ -13,13 +13,8 @@ namespace MeneMarket.Services.Processings.Products
         public async ValueTask<Product> AddProductAsync(Product product) =>
             await this.productService.AddProductAsync(product);
 
-        public async Task<List<Product>> RetrieveAllProductsAsync()
-        {
-            List<Product> allProducts =
-                await this.productService.RetrieveAllProductsAsync();
-
-            return allProducts;
-        }
+        public async Task<List<Product>> RetrieveAllProductsAsync() =>
+            await this.productService.RetrieveAllProductsAsync();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.productService.RetrieveProductByIdAsync(id);
