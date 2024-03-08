@@ -113,11 +113,8 @@ static void AddOrchestrationServices(WebApplicationBuilder builder)
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors(builder => builder
     .AllowAnyOrigin()
