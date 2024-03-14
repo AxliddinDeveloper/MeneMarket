@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using MeneMarket.Models.Foundations.BalanceHistorys;
-using MeneMarket.Models.Foundations.DonationBoxes;
+using MeneMarket.Models.Foundations.DonatedUsers;
 using MeneMarket.Models.Foundations.OfferLinks;
 
 namespace MeneMarket.Models.Foundations.Users
@@ -19,8 +19,7 @@ namespace MeneMarket.Models.Foundations.Users
         public Role Role { get; set; }
         public virtual ICollection<OfferLink> OfferLinks  { get; set; }
         public virtual ICollection<BalanceHistory> BalanceHistorys { get; set; }
-        public Guid DonationBoxId { get; set; }
         [JsonIgnore]
-        public virtual DonationBox DonationBox { get; set; }
+        public virtual ICollection<DonatedUser> DonatedUsers { get; set;}
     }
 }

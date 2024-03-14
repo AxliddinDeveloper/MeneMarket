@@ -12,8 +12,11 @@ namespace MeneMarket.Services.Foundations.ProductRequests
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<ProductRequest> AddProductRequestAsync(ProductRequest productRequest) =>
-            await this.storageBroker.InsertProductRequestAsync(productRequest);
+        public async ValueTask<ProductRequest> AddProductRequestAsync(ProductRequest productRequest)
+        {
+            productRequest.Id = Guid.NewGuid();
+            return await this.storageBroker.InsertProductRequestAsync(productRequest);
+        }
 
         public async ValueTask<ProductRequest> ModifyProductRequestAsync(ProductRequest productRequest) =>
             await this.storageBroker.UpdateProductRequestAsync(productRequest);

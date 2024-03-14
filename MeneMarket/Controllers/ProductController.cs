@@ -18,11 +18,11 @@ namespace MeneMarket.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> PostProductAsync(Product product) =>
             await this.productProcessingService.AddProductAsync(product);
 
         [HttpGet]
-        [Authorize]
         public async  Task<List<Product>> GelAllProductsAsync() =>
             await this.productProcessingService.RetrieveAllProductsAsync();
 
@@ -31,10 +31,12 @@ namespace MeneMarket.Controllers
             await this.productProcessingService.RetrieveProductByIdAsync(id);
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> PutProductAsync(Product product) =>
             await this.productProcessingService.ModifyProductAsync(product);
         
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> DeleteProductAsync(Guid id) =>
             await this.productProcessingService.RemoveProductByIdAsync(id);
     }

@@ -13,8 +13,11 @@ namespace MeneMarket.Services.Foundations.ProductAttributes
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<ProductAttribute> AddProductAttributeAsync(ProductAttribute productAttribute) =>
-            await this.storageBroker.InsertProductAttributeAsync(productAttribute);
+        public async ValueTask<ProductAttribute> AddProductAttributeAsync(ProductAttribute productAttribute)
+        {
+            productAttribute.ProductAttributeId = Guid.NewGuid();
+            return await this.storageBroker.InsertProductAttributeAsync(productAttribute);
+        }
 
         public IQueryable<ProductAttribute> RetrieveAllProductAttributes() =>
             this.storageBroker.SelectAllProductAttributes();

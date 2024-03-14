@@ -55,18 +55,11 @@ namespace MeneMarket.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: true),
                     Balance = table.Column<decimal>(type: "TEXT", nullable: false),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false),
-                    DonationBoxId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Role = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_Users_Donations_DonationBoxId",
-                        column: x => x.DonationBoxId,
-                        principalTable: "Donations",
-                        principalColumn: "DonationBoxId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,6 +171,32 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DonatedUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DonationPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    DonationBoxId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonatedUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DonatedUsers_Donations_DonationBoxId",
+                        column: x => x.DonationBoxId,
+                        principalTable: "Donations",
+                        principalColumn: "DonationBoxId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DonatedUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OfferLinks",
                 columns: table => new
                 {
@@ -242,6 +261,16 @@ namespace MeneMarket.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DonatedUsers_DonationBoxId",
+                table: "DonatedUsers",
+                column: "DonationBoxId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonatedUsers_UserId",
+                table: "DonatedUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ImageMetadatas_ProductId",
                 table: "ImageMetadatas",
                 column: "ProductId");
@@ -265,11 +294,6 @@ namespace MeneMarket.Migrations
                 name: "IX_ProductRequests_ProductId",
                 table: "ProductRequests",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_DonationBoxId",
-                table: "Users",
-                column: "DonationBoxId");
         }
 
         /// <inheritdoc />
@@ -285,6 +309,9 @@ namespace MeneMarket.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "DonatedUsers");
+
+            migrationBuilder.DropTable(
                 name: "ImageMetadatas");
 
             migrationBuilder.DropTable(
@@ -297,13 +324,13 @@ namespace MeneMarket.Migrations
                 name: "OfferLinks");
 
             migrationBuilder.DropTable(
+                name: "Donations");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Donations");
         }
     }
 }

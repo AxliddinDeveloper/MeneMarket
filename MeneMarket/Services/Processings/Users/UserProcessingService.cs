@@ -13,8 +13,16 @@ namespace MeneMarket.Services.Processings.Users
             this.userService = userService;
         }
 
-        public async ValueTask<User> AddUserAsync(User user) =>
-            await this.userService.AddUserAsync(user);
+        public async ValueTask<User> AddUserAsync(User user)
+        {
+            IQueryable<User> AllUsers = this.userService.RetrieveAllUsers();
+            User UserAlreadyExsists = AllUsers.FirstOrDefault(u => u.Email == user.Email);
+
+            if (UserAlreadyExsists == null)
+                return await this.userService.AddUserAsync(user);
+            else
+                throw new InvalidDataException("Foydalanuvchi Allaqachon mavjud");
+        }
 
         public IQueryable<User> RetrieveAllUsers() =>
             this.userService.RetrieveAllUsers();

@@ -1,4 +1,5 @@
-﻿using MeneMarket.Models.Foundations.Users;
+﻿using System.Text.Json.Serialization;
+using MeneMarket.Models.Foundations.DonatedUsers;
 
 namespace MeneMarket.Models.Foundations.DonationBoxes
 {
@@ -6,6 +7,7 @@ namespace MeneMarket.Models.Foundations.DonationBoxes
     {
         public Guid DonationBoxId { get; set; }
         public decimal Balance { get; set; }
-        public virtual ICollection<User> DonatedUsers { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<DonatedUser> Users { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.Users;
 using MeneMarket.Services.Orchestrations.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -17,6 +18,7 @@ namespace MeneMarket.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult<IQueryable<User>> GelAllUsers()
         {
             IQueryable<User> allUsers =
@@ -26,14 +28,17 @@ namespace MeneMarket.Controllers
         }
 
         [HttpGet("ById")]
+        [Authorize(Roles = "Admin,User")]
         public async ValueTask<ActionResult<User>> GetUserByIdAsync(Guid id) =>
             await this.userOrchestrationService.RetrieveUserByIdAsync(id);
 
         [HttpPut]
+        [Authorize(Roles = "Admin,User")]
         public async ValueTask<ActionResult<User>> PutUserAsync(User user) =>
             await this.userOrchestrationService.ModifyUserAsync(user);
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<User>> DeleteUserAsync(Guid id) =>
             await this.userOrchestrationService.RemoveUserByIdAsync(id);
     }

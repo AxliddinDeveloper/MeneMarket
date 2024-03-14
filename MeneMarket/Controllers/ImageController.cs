@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Services.Orchestrations.Images;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -17,6 +18,7 @@ namespace MeneMarket.Controllers
         }
 
         [HttpPost("upload")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UploadImage(
             IFormFile image, Guid productId)
         {
@@ -36,6 +38,7 @@ namespace MeneMarket.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public ActionResult<ValueTask<string>> DeleteImage(Guid imageId)
         {
             return this.imageFileOrchestrationService.RemoveImageFileByIdAsync(imageId);

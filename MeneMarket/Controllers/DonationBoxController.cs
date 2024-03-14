@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.DonationBoxes;
 using MeneMarket.Services.Orchestrations.DonationBoxes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -17,10 +18,12 @@ namespace MeneMarket.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<DonationBox>> PostDonationBoxAsync(DonationBox donationBox) =>
             await this.donationBoxOrchestrationService.AddDonationBoxAsync(donationBox);
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult<IQueryable<DonationBox>> GelAllDonationBoxs()
         {
             IQueryable<DonationBox> allUDonationBoxs =
@@ -28,12 +31,14 @@ namespace MeneMarket.Controllers
 
             return Ok(allUDonationBoxs);
         }
+
         [HttpGet("ById")]
+        [Authorize(Roles = "Admin,User")]
         public async ValueTask<ActionResult<DonationBox>> GetDonationBoxByIdAsync(Guid id) =>
             await this.donationBoxOrchestrationService.RetrieveDonationBoxByIdAsync(id);
 
-
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<DonationBox>> DeleteDonationBoxAsync(Guid id) =>
             await this.donationBoxOrchestrationService.RemoveDonationBoxByIdAsync(id);
     }

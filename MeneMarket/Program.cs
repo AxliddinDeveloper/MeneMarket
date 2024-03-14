@@ -1,35 +1,12 @@
 using System.Text;
-using MeneMarket.Brokers.Files;
+using MeneMarket;
 using MeneMarket.Brokers.Storages;
-using MeneMarket.Brokers.Tokens;
-using MeneMarket.Services.Foundations.BalanceHistorys;
-using MeneMarket.Services.Foundations.Clients;
-using MeneMarket.Services.Foundations.Comments;
-using MeneMarket.Services.Foundations.DonationBoxes;
-using MeneMarket.Services.Foundations.Files;
-using MeneMarket.Services.Foundations.ImageMetadatas;
-using MeneMarket.Services.Foundations.OfferLinks;
-using MeneMarket.Services.Foundations.ProductAttributes;
-using MeneMarket.Services.Foundations.ProductRequests;
-using MeneMarket.Services.Foundations.Products;
-using MeneMarket.Services.Foundations.Tokens;
-using MeneMarket.Services.Foundations.Users;
-using MeneMarket.Services.Orchestrations.Clients;
-using MeneMarket.Services.Orchestrations.DonationBoxes;
-using MeneMarket.Services.Orchestrations.Images;
-using MeneMarket.Services.Orchestrations.ProductRequests;
-using MeneMarket.Services.Orchestrations.Users;
-using MeneMarket.Services.Processings.BalanceHistorys;
-using MeneMarket.Services.Processings.DonationBoxes;
-using MeneMarket.Services.Processings.Files;
-using MeneMarket.Services.Processings.Images;
-using MeneMarket.Services.Processings.Products;
-using MeneMarket.Services.Processings.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
+RegisterServices registeredServices = new RegisterServices();
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -39,7 +16,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
-        Description = "Standart Authorization header using the Bearer scheme (\"bearer {token}\")",
+        Description = "Standart Authorization header using the Bearer scheme (\"bearer { your token}\")",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
@@ -63,53 +40,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 builder.Services.AddDbContext<StorageBroker>();
-AddProcessingServices(builder);
-AddOrchestrationServices(builder);
-AddFoundationServices(builder);
-AddBrokers(builder);
-
-static void AddBrokers(WebApplicationBuilder builder)
-{
-    builder.Services.AddTransient<IStorageBroker, StorageBroker>();
-    builder.Services.AddTransient<IFileBroker, FileBroker>();
-    builder.Services.AddTransient<ITokenBroker, TokenBroker>();
-}
-
-static void AddFoundationServices(WebApplicationBuilder builder)
-{
-    builder.Services.AddTransient<ICommentService, CommentService>();
-    builder.Services.AddTransient<IBalanceHistoryService, BalanceHistoryService>();
-    builder.Services.AddTransient<IClientService, ClientService>();
-    builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();
-    builder.Services.AddTransient<IFileService, FileService>();
-    builder.Services.AddTransient<IImageMetadataService, ImageMetadataService>();
-    builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
-    builder.Services.AddTransient<IProductAttributeService, ProductAttributeService>();
-    builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
-    builder.Services.AddTransient<IProductService, ProductService>();
-    builder.Services.AddTransient<ITokenService, TokenService>();
-    builder.Services.AddTransient<IUserService, UserService>();
-}
-
-static void AddProcessingServices(WebApplicationBuilder builder)
-{
-    builder.Services.AddTransient<IDonationBoxProcessingService, DonationBoxProcessingService>();
-    builder.Services.AddTransient<IBalanceHistoryProcessingService, BalanceHistoryProcessingService>();
-    builder.Services.AddTransient<IFileProcessingService, FileProcessingService>();
-    builder.Services.AddTransient<IUserProcessingService, UserProcessingService>();
-    builder.Services.AddTransient<IProductProcessingService, ProductProcessingService>();
-    builder.Services.AddTransient<IImageMetadataProcessingService, ImageMetadataProcessingService>();
-}
-
-static void AddOrchestrationServices(WebApplicationBuilder builder)
-{
-    builder.Services.AddTransient<IClientOrchestrationService,  ClientOrchestrationService>();
-    builder.Services.AddTransient<IDonationBoxOrchestrationService, DonationBoxOrchestrationService>();
-    builder.Services.AddTransient<IProductRequestOrchestrationService, ProductRequestOrchestrationService>();
-    builder.Services.AddTransient<IUserOrchestrationService, UserOrchestrationService>();
-    builder.Services.AddTransient<IUserSecurityOrchestrationService, UserSecurityOrchestrationService>();
-    builder.Services.AddTransient<IImageOrchestrationService, ImageOrchestrationService>();
-}
+registeredServices.AddProcessingServices(builder);
+registeredServices.AddOrchestrationServices(builder);
+registeredServices.AddFoundationServices(builder);
+registeredServices.AddBrokers(builder);
 
 var app = builder.Build();
 

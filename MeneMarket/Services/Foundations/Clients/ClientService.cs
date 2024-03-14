@@ -12,8 +12,11 @@ namespace MeneMarket.Services.Foundations.Clients
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<Client> AddClientAsync(Client client) =>
-            await this.storageBroker.InsertClientAsync(client);
+        public async ValueTask<Client> AddClientAsync(Client client)
+        {
+            client.ClientId = Guid.NewGuid();
+            return await this.storageBroker.InsertClientAsync(client);
+        }
 
         public async ValueTask<Client> ModifyClientAsync(Client client) =>
             await this.storageBroker.UpdateClientAsync(client);

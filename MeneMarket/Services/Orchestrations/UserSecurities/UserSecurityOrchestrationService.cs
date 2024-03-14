@@ -19,8 +19,11 @@ namespace MeneMarket.Services.Orchestrations.Users
             this.tokenService = tokenService;
         }
 
-        public async ValueTask<User> AddUserAsync(User user) =>
-            await this.userProcessingService.AddUserAsync(user);
+        public async ValueTask<User> AddUserAsync(User user)
+        {
+            user.UserId = Guid.NewGuid();
+            return await this.userProcessingService.AddUserAsync(user);
+        }
 
         public UserToken LoginUser(LoginUser loginUser)
         {
@@ -28,7 +31,7 @@ namespace MeneMarket.Services.Orchestrations.Users
 
             var result = allUsers.FirstOrDefault(retrievedUser =>
             retrievedUser.Email.Equals(loginUser.Email)
-                    || retrievedUser.Password.Equals(loginUser.Password));
+                    && retrievedUser.Password.Equals(loginUser.Password));
 
             return this.tokenService.AddToken(result);
         }

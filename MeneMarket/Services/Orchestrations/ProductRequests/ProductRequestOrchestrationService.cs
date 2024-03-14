@@ -41,20 +41,26 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
             var client = allClients.FirstOrDefault(c => 
                 c.IpAddress == productRequest.IpAddress);
 
-            OfferLink offerLink =
-                await  this.offerLinkService.RetrieveOfferLinkByIdAsync(client.OfferLinkId);
-
-            if (client != null && offerLink.ProductId == productRequest.ProductId)
+            if (client == null)
             {
-                client.StatusType = StatusType.Accepted;
-
-                await this.clientService.ModifyClientAsync(client);
+                return await this.productRequestService.AddProductRequestAsync(productRequest);
             }
+            else
+            {
+                OfferLink offerLink =
+                    await this.offerLinkService.RetrieveOfferLinkByIdAsync(client.OfferLinkId);
 
-            productRequest.Status =
-                ProductRequestStatusType.Accepted;
+                if (client != null && offerLink.ProductId == productRequest.ProductId)
+                {
+                    client.StatusType = StatusType.Accepted;
+                    await this.clientService.ModifyClientAsync(client);
+                }
 
-            return await this.productRequestService.AddProductRequestAsync(productRequest);
+                productRequest.Status =
+                    ProductRequestStatusType.Accepted;
+
+                return await this.productRequestService.AddProductRequestAsync(productRequest);
+            }
         }
 
         public IQueryable<ProductRequest> RetrieveAllProductRequests() =>
@@ -76,47 +82,48 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
 
             var client = allClients.FirstOrDefault(c =>
                 c.IpAddress == productRequest.IpAddress);
-
-            var offerLink =
+            
+            if (client != null)
+            {
+                var offerLink =
                 await this.offerLinkService.RetrieveOfferLinkByIdAsync(client.OfferLinkId);
 
-            if (client != null && 
-                selectedProductRequest.Status != productRequest.Status && 
-                productRequest.Status == ProductRequestStatusType.Delivered &&
-                offerLink.ProductId == productRequest.ProductId)
-            {
-                client.StatusType.Equals(productRequest.Status.ToString());
-                await this.clientService.ModifyClientAsync(client);
+                if (selectedProductRequest.Status != productRequest.Status &&
+                    productRequest.Status == ProductRequestStatusType.Delivered &&
+                    offerLink.ProductId == productRequest.ProductId)
+                {
+                    client.StatusType.Equals(productRequest.Status.ToString());
+                    await this.clientService.ModifyClientAsync(client);
 
-                IQueryable<DonationBox> allDonationBoxes = 
-                    this.donationBoxProcessingService.RetrieveAllDonationBoxs();
+                    IQueryable<DonationBox> allDonationBoxes =
+                        this.donationBoxProcessingService.RetrieveAllDonationBoxs();
 
-                var selectedDonationBox  = allDonationBoxes.FirstOrDefault(d =>
-                d.DonationBoxId == d.DonationBoxId);
+                    var selectedDonationBox = allDonationBoxes.FirstOrDefault(d =>
+                    d.DonationBoxId == d.DonationBoxId);
 
-                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
-                    selectedDonationBox, client.OfferLinkId, outbalance = false);
+                    await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
+                        selectedDonationBox, client.OfferLinkId, outbalance = false);
 
-                return await this.productRequestService.ModifyProductRequestAsync(productRequest);
-            }
-            else if (client != null &&
-                selectedProductRequest.Status != productRequest.Status &&
-                productRequest.Status == ProductRequestStatusType.CameBack && 
-                selectedProductRequest.Status == ProductRequestStatusType.Delivered &&
-                offerLink.ProductId == productRequest.ProductId)
-            {
-                client.StatusType.Equals(productRequest.Status.ToString());
-                await this.clientService.ModifyClientAsync(client);
-                IQueryable<DonationBox> allDonationBoxes =
-                    this.donationBoxOrchestrationService.RetrieveAllDonationBoxes();
+                    return await this.productRequestService.ModifyProductRequestAsync(productRequest);
+                }
+                else if (selectedProductRequest.Status != productRequest.Status &&
+                    productRequest.Status == ProductRequestStatusType.CameBack &&
+                    selectedProductRequest.Status == ProductRequestStatusType.Delivered &&
+                    offerLink.ProductId == productRequest.ProductId)
+                {
+                    client.StatusType.Equals(productRequest.Status.ToString());
+                    await this.clientService.ModifyClientAsync(client);
+                    IQueryable<DonationBox> allDonationBoxes =
+                        this.donationBoxOrchestrationService.RetrieveAllDonationBoxes();
 
-                var selectedDonationBox = allDonationBoxes.FirstOrDefault(d =>
-                d.DonationBoxId == d.DonationBoxId);
+                    var selectedDonationBox = allDonationBoxes.FirstOrDefault(d =>
+                    d.DonationBoxId == d.DonationBoxId);
 
-                await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
-                    selectedDonationBox, client.OfferLinkId, outbalance);
+                    await this.donationBoxOrchestrationService.ModifyDonationBoxAsync(
+                        selectedDonationBox, client.OfferLinkId, outbalance);
 
-                return await this.productRequestService.ModifyProductRequestAsync(productRequest);
+                    return await this.productRequestService.ModifyProductRequestAsync(productRequest);
+                }
             }
 
             return await this.productRequestService.ModifyProductRequestAsync(productRequest);

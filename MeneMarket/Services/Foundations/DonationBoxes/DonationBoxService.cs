@@ -12,6 +12,12 @@ namespace MeneMarket.Services.Foundations.DonationBoxes
             this.storageBroker = storageBroker;
         }
 
+        public async ValueTask<DonationBox> AddDonationBoxAsync(DonationBox donationBox)
+        {
+            donationBox.DonationBoxId = Guid.NewGuid();
+            return await this.storageBroker.InsertDonationBoxAsync(donationBox);
+        }
+
         public IQueryable<DonationBox> RetrieveAllDonationBoxes() =>
             this.storageBroker.SelectAllDonationBoxes();
 
@@ -28,8 +34,5 @@ namespace MeneMarket.Services.Foundations.DonationBoxes
 
             return await this.storageBroker.DeleteDonationBoxAsync(donationBox);
         }
-
-        public async ValueTask<DonationBox> AddDonationBoxAsync(DonationBox donationBox) =>
-            await this.storageBroker.InsertDonationBoxAsync(donationBox);
     }
 }

@@ -93,6 +93,30 @@ namespace MeneMarket.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.DonatedUsers.DonatedUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DonationBoxId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DonationPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DonationBoxId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DonatedUsers");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", b =>
                 {
                     b.Property<Guid>("DonationBoxId")
@@ -277,9 +301,6 @@ namespace MeneMarket.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("DonationBoxId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
@@ -299,8 +320,6 @@ namespace MeneMarket.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("DonationBoxId");
 
                     b.ToTable("Users");
                 });
@@ -336,6 +355,25 @@ namespace MeneMarket.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.DonatedUsers.DonatedUser", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", "DonationBox")
+                        .WithMany("Users")
+                        .HasForeignKey("DonationBoxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MeneMarket.Models.Foundations.Users.User", "User")
+                        .WithMany("DonatedUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DonationBox");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
@@ -388,20 +426,9 @@ namespace MeneMarket.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>
-                {
-                    b.HasOne("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", "DonationBox")
-                        .WithMany("DonatedUsers")
-                        .HasForeignKey("DonationBoxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DonationBox");
-                });
-
             modelBuilder.Entity("MeneMarket.Models.Foundations.DonationBoxes.DonationBox", b =>
                 {
-                    b.Navigation("DonatedUsers");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
@@ -423,6 +450,8 @@ namespace MeneMarket.Migrations
             modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>
                 {
                     b.Navigation("BalanceHistorys");
+
+                    b.Navigation("DonatedUsers");
 
                     b.Navigation("OfferLinks");
                 });

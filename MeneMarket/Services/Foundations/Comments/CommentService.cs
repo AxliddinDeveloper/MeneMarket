@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Brokers.Storages;
+using MeneMarket.Models.Foundations.Clients;
 using MeneMarket.Models.Foundations.Comments;
 
 namespace MeneMarket.Services.Foundations.Comments
@@ -12,8 +13,11 @@ namespace MeneMarket.Services.Foundations.Comments
             this.storageBroker = storageBroker;
         }
 
-        public async ValueTask<Comment> AddCommentAsync(Comment comment) =>
-            await this.storageBroker.InsertCommentAsync(comment);
+        public async ValueTask<Comment> AddCommentAsync(Comment comment)
+        {
+            comment.Id = Guid.NewGuid();
+            return await this.storageBroker.InsertCommentAsync(comment);
+        }
 
         public IQueryable<Comment> RetrieveAllComments() =>
           this.storageBroker.SelectAllComments();

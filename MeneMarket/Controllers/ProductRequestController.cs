@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.ProductRequests;
 using MeneMarket.Services.Orchestrations.ProductRequests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -28,6 +29,7 @@ namespace MeneMarket.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult<IQueryable<ProductRequest>> GelAllProductRequests()
         {
             IQueryable<ProductRequest> allProductRequests =
@@ -37,14 +39,17 @@ namespace MeneMarket.Controllers
         }
 
         [HttpGet("ById")]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<ProductRequest>> GetProductRequestByIdAsync(Guid id) =>
             await this.productRequestOrchestrationService.RetrieveProductRequestByIdAsync(id);
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<ProductRequest>> PutProductRequestAsync(ProductRequest productRequest) =>
             await this.productRequestOrchestrationService.ModifyProductRequestAsync(productRequest);
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<ProductRequest>> DeleteProductRequestAsync(Guid id) =>
             await this.productRequestOrchestrationService.RemoveProductRequestByIdAsync(id);
     }

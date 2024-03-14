@@ -13,12 +13,8 @@ namespace MeneMarket.Brokers.Storages
         public IQueryable<DonationBox> SelectAllDonationBoxes() =>
             this.SelectAll<DonationBox>();
 
-        public async ValueTask<DonationBox> SelectDonationBoxByIdAsync(Guid id)
-        {
-            return await this.Donations
-                .Include(d => d.DonatedUsers)
-                .FirstOrDefaultAsync(d => d.DonationBoxId == id);
-        }
+        public async ValueTask<DonationBox> SelectDonationBoxByIdAsync(Guid id) =>
+             await this.Donations.FirstOrDefaultAsync(d => d.DonationBoxId == id);
 
         public async ValueTask<DonationBox> UpdateDonationBoxAsync(DonationBox donationBox) =>
             await UpdateAsync(donationBox);
