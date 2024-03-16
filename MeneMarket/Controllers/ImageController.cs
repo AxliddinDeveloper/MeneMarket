@@ -20,18 +20,21 @@ namespace MeneMarket.Controllers
         [HttpPost("upload")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UploadImage(
-            IFormFile image, Guid productId)
+            List<IFormFile> images, Guid productId)
         {
-            string imagePath;
+            List<string> imagePath = new List<string>();
 
-            using (var memoryStream = new MemoryStream())
+            foreach (var image in images)
             {
-                string extension = Path.GetExtension(image.FileName);
-                image.CopyTo(memoryStream);
-                memoryStream.Position = 0;
+                using (var memoryStream = new MemoryStream())
+                {
+                    string extension = Path.GetExtension(image.FileName);
+                    image.CopyTo(memoryStream);
+                    memoryStream.Position = 0;
 
-                imagePath = await this.imageFileOrchestrationService.StoreImageAsync(
-                    memoryStream, extension, productId);
+                    imagePath.Add(await this.imageFileOrchestrationService.StoreImageAsync(
+                        memoryStream, extension, productId));
+                }
             }
 
             return Ok(imagePath);

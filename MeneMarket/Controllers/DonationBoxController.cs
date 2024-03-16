@@ -18,7 +18,6 @@ namespace MeneMarket.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<DonationBox>> PostDonationBoxAsync(DonationBox donationBox) =>
             await this.donationBoxOrchestrationService.AddDonationBoxAsync(donationBox);
 

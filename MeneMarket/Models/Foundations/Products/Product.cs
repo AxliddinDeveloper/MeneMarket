@@ -1,4 +1,5 @@
-﻿using MeneMarket.Models.Foundations.Comments;
+﻿using System.Text.Json.Serialization;
+using MeneMarket.Models.Foundations.Comments;
 using MeneMarket.Models.Foundations.ImageMetadatas;
 using MeneMarket.Models.Foundations.OfferLinks;
 using MeneMarket.Models.Foundations.ProductAttributes;
@@ -21,6 +22,7 @@ namespace MeneMarket.Models.Foundations.Products
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ImageMetadata> ImageMetadatas { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
+        [JsonIgnore]
         public virtual ICollection<OfferLink> OfferLinks { get; set; }
     }
 }

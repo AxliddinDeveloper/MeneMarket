@@ -31,7 +31,7 @@ namespace MeneMarket.Services.Foundations.OfferLinks
         {
             var selectedOfferLink = await this.storageBroker.SelectOfferLinkByIdAsync(id);
 
-           return  await this.storageBroker.DeleteOfferLinkAsync(selectedOfferLink);
+            return await this.storageBroker.DeleteOfferLinkAsync(selectedOfferLink);
         }
     }
 }

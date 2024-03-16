@@ -26,7 +26,7 @@ namespace MeneMarket.Services.Foundations.BalanceHistorys
 
         public async ValueTask<BalanceHistory> RemoveBalanceHistoryAsync(Guid id)
         {
-            BalanceHistory selectedBalanceHistory = 
+            BalanceHistory selectedBalanceHistory =
                 await this.storageBroker.SelectBalanceHistoryByIdAsync(id);
 
             return await this.storageBroker.DeleteBalanceHistoryAsync(selectedBalanceHistory);

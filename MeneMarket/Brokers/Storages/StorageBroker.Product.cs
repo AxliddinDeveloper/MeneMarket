@@ -10,13 +10,13 @@ namespace MeneMarket.Brokers.Storages
         public async ValueTask<Product> InsertProductAsync(Product product) =>
             await InsertAsync(product);
 
-        public async Task<List<Product>> SelectAllProductsAsync()
+        public IQueryable<Product> SelectAllProducts()
         {
-            return await this.Products
+            return this.Products
                 .Include(p => p.ProductAttributes)
                 .Include(p => p.ImageMetadatas)
                 .Include(p => p.ImageMetadatas)
-                .ToListAsync();
+                .AsQueryable();
         }
 
         public async ValueTask<Product> SelectProductByIdAsync(Guid productId) =>

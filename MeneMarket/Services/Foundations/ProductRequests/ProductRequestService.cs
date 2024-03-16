@@ -23,7 +23,7 @@ namespace MeneMarket.Services.Foundations.ProductRequests
 
         public async ValueTask<ProductRequest> RemoveProductRequestAsync(Guid id)
         {
-            ProductRequest mayBeProductRequest = 
+            ProductRequest mayBeProductRequest =
                 await this.storageBroker.SelectProductRequestByIdAsync(id);
 
             return await this.storageBroker.DeleteProductRequestAsync(mayBeProductRequest);

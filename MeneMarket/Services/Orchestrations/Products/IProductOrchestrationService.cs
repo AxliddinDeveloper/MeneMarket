@@ -1,8 +1,8 @@
 ﻿using MeneMarket.Models.Foundations.Products;
 
-namespace MeneMarket.Services.Foundations.Products
+namespace MeneMarket.Services.Orchestrations.Products
 {
-    public interface IProductService
+    public interface IProductOrchestrationService
     {
         ValueTask<Product> AddProductAsync(Product product);
         IQueryable<Product> RetrieveAllProducts();

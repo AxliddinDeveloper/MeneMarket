@@ -1,5 +1,4 @@
 ﻿using MeneMarket.Models.Foundations.Clients;
-using MeneMarket.Models.Foundations.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeneMarket.Brokers.Storages

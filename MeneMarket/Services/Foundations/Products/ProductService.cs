@@ -14,12 +14,11 @@ namespace MeneMarket.Services.Foundations.Products
 
         public async ValueTask<Product> AddProductAsync(Product product)
         {
-            product.ProductId = Guid.NewGuid();
             return await this.storageBroker.InsertProductAsync(product);
         }
 
-        public async Task<List<Product>> RetrieveAllProductsAsync() =>
-            await this.storageBroker.SelectAllProductsAsync();
+        public IQueryable<Product> RetrieveAllProducts() =>
+            this.storageBroker.SelectAllProducts();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.storageBroker.SelectProductByIdAsync(id);
@@ -32,7 +31,7 @@ namespace MeneMarket.Services.Foundations.Products
             Product mayBeProduct =
                 await this.storageBroker.SelectProductByIdAsync(id);
 
-             return await this.storageBroker.DeleteProductAsync(mayBeProduct);
+            return await this.storageBroker.DeleteProductAsync(mayBeProduct);
         }
     }
 }

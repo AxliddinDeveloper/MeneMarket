@@ -18,6 +18,7 @@ using MeneMarket.Services.Orchestrations.Clients;
 using MeneMarket.Services.Orchestrations.DonationBoxes;
 using MeneMarket.Services.Orchestrations.Images;
 using MeneMarket.Services.Orchestrations.ProductRequests;
+using MeneMarket.Services.Orchestrations.Products;
 using MeneMarket.Services.Orchestrations.Users;
 using MeneMarket.Services.Processings.BalanceHistorys;
 using MeneMarket.Services.Processings.DonationBoxes;
@@ -66,6 +67,7 @@ namespace MeneMarket
 
         public void AddOrchestrationServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddTransient<IProductOrchestrationService, ProductOrchestrationService>();
             builder.Services.AddTransient<IClientOrchestrationService, ClientOrchestrationService>();
             builder.Services.AddTransient<IDonationBoxOrchestrationService, DonationBoxOrchestrationService>();
             builder.Services.AddTransient<IProductRequestOrchestrationService, ProductRequestOrchestrationService>();

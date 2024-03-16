@@ -1,5 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Products;
-using MeneMarket.Services.Processings.Products;
+using MeneMarket.Services.Orchestrations.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -10,34 +10,35 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class ProductController : RESTFulController
     {
-        private readonly IProductProcessingService productProcessingService;
+        private readonly IProductOrchestrationService productOrchestrationService;
 
-        public ProductController(IProductProcessingService productProcessingService)
+        public ProductController(
+            IProductOrchestrationService productOrchestrationService)
         {
-            this.productProcessingService = productProcessingService;
+            this.productOrchestrationService = productOrchestrationService;
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> PostProductAsync(Product product) =>
-            await this.productProcessingService.AddProductAsync(product);
+            await this.productOrchestrationService.AddProductAsync(product);
 
         [HttpGet]
-        public async  Task<List<Product>> GelAllProductsAsync() =>
-            await this.productProcessingService.RetrieveAllProductsAsync();
+        public IQueryable<Product> GelAllProducts() =>
+            this.productOrchestrationService.RetrieveAllProducts();
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<Product>> GetProductByIdAsync(Guid id) =>
-            await this.productProcessingService.RetrieveProductByIdAsync(id);
+            await this.productOrchestrationService.RetrieveProductByIdAsync(id);
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> PutProductAsync(Product product) =>
-            await this.productProcessingService.ModifyProductAsync(product);
-        
+            await this.productOrchestrationService.ModifyProductAsync(product);
+
         [HttpDelete]
         [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> DeleteProductAsync(Guid id) =>
-            await this.productProcessingService.RemoveProductByIdAsync(id);
+            await this.productOrchestrationService.RemoveProductAsync(id);
     }
 }
