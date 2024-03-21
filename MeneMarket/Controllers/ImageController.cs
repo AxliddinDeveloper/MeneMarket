@@ -9,32 +9,29 @@ namespace MeneMarket.Controllers
     [Route("api/[controller]")]
     public class ImageController : RESTFulController
     {
-        private readonly IImageOrchestrationService imageFileOrchestrationService;
+        private readonly IImageOrchestrationService imageOrchestrationService;
 
         public ImageController(
-            IImageOrchestrationService imageFileOrchestrationService)
+            IImageOrchestrationService imageOrchestrationService)
         {
-            this.imageFileOrchestrationService = imageFileOrchestrationService;
+            this.imageOrchestrationService = imageOrchestrationService;
         }
 
         [HttpPost("upload")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UploadImage(
-            List<IFormFile> images, Guid productId)
+                   IFormFile image, Guid productId)
         {
-            List<string> imagePath = new List<string>();
+            string imagePath;
 
-            foreach (var image in images)
+            using (var memoryStream = new MemoryStream())
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    string extension = Path.GetExtension(image.FileName);
-                    image.CopyTo(memoryStream);
-                    memoryStream.Position = 0;
+                string extension = Path.GetExtension(image.FileName);
+                image.CopyTo(memoryStream);
+                memoryStream.Position = 0;
 
-                    imagePath.Add(await this.imageFileOrchestrationService.StoreImageAsync(
-                        memoryStream, extension, productId));
-                }
+                imagePath = await this.imageOrchestrationService.StoreImageAsync(
+                    memoryStream, extension, productId);
             }
 
             return Ok(imagePath);
@@ -44,7 +41,7 @@ namespace MeneMarket.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult<ValueTask<string>> DeleteImage(Guid imageId)
         {
-            return this.imageFileOrchestrationService.RemoveImageFileByIdAsync(imageId);
+            return this.imageOrchestrationService.RemoveImageFileByIdAsync(imageId);
         }
     }
 }

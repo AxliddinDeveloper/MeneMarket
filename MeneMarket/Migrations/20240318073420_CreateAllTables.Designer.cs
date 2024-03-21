@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240316091947_CreateAllTables")]
+    [Migration("20240318073420_CreateAllTables")]
     partial class CreateAllTables
     {
         /// <inheritdoc />
@@ -267,6 +267,9 @@ namespace MeneMarket.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Images")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsArchived")

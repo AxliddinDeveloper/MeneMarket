@@ -17,7 +17,7 @@ namespace MeneMarket.Services.Processings.Images
             await this.imageMetadataService.AddImageMetadataAsync(imageMetadata);
 
         public IQueryable<ImageMetadata> RetrieveAllImageMetadatas() =>
-            this.RetrieveAllImageMetadatas();
+            this.imageMetadataService.RetrieveAllImageMetadatas();
 
         public async ValueTask<ImageMetadata> RetrieveImageMetadataByIdAsync(Guid id) =>
             await this.imageMetadataService.RetrieveImageMetadataByIdAsync(id);

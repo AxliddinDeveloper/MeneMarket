@@ -46,7 +46,7 @@ namespace MeneMarket.Services.Orchestrations.Images
         }
 
         public async ValueTask<string> RemoveImageFileByIdAsync(Guid id)
-        {
+        { 
             ImageMetadata image =
                 await this.imageMetadtaProcessingService.RetrieveImageMetadataByIdAsync(id);
 
@@ -54,5 +54,11 @@ namespace MeneMarket.Services.Orchestrations.Images
 
             return this.fileProcessingService.DeleteImageFile(image.Name);
         }
+
+        public async ValueTask<string> RemoveImageFileByFileNameAsync(string fileName) =>
+            this.fileProcessingService.DeleteImageFile(fileName);
+
+        public IQueryable<ImageMetadata> RetrieveAllImageMetadatas() =>
+            this.imageMetadtaProcessingService.RetrieveAllImageMetadatas();
     }
 }

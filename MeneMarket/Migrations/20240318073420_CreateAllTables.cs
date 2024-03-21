@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -36,7 +37,8 @@ namespace MeneMarket.Migrations
                     NumberStars = table.Column<short>(type: "INTEGER", nullable: false),
                     ProductOwner = table.Column<string>(type: "TEXT", nullable: true),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ProductType = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProductType = table.Column<int>(type: "INTEGER", nullable: false),
+                    Images = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

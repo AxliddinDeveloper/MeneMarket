@@ -19,6 +19,8 @@ namespace MeneMarket.Models.Foundations.Products
         public string ProductOwner { get; set; }
         public bool IsArchived { get; set; }
         public ProductType ProductType { get; set; }
+        [JsonIgnore]
+        public List<string> Images { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ImageMetadata> ImageMetadatas { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }

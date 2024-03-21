@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Products;
+using MeneMarket.Models.Orchestrations.ProductWithImages;
 using MeneMarket.Services.Orchestrations.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,13 @@ namespace MeneMarket.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PostProductAsync(Product product) =>
-            await this.productOrchestrationService.AddProductAsync(product);
+        public async ValueTask<ActionResult<Product>> PostProductAsync([FromForm] ProductWithImages request)
+        {
+            Product product = request.Product;
+            List<IFormFile> images = request.Images;
+
+            return await this.productOrchestrationService.AddProductAsync(product, images);
+        }
 
         [HttpGet]
         public IQueryable<Product> GelAllProducts() =>
@@ -33,8 +39,14 @@ namespace MeneMarket.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PutProductAsync(Product product) =>
-            await this.productOrchestrationService.ModifyProductAsync(product);
+        public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages)
+        {
+            var product = productWithImages.Product;
+            List<IFormFile> images = productWithImages.Images;
+            List<string> imageFilePaths = productWithImages.ImageFilePaths;
+
+            return await this.productOrchestrationService.ModifyProductAsync(product, images, imageFilePaths);
+        }
 
         [HttpDelete]
         [Authorize(Roles = "Admin")]

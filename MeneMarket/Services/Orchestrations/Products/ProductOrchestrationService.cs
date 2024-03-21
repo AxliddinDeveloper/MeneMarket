@@ -22,12 +22,29 @@ namespace MeneMarket.Services.Orchestrations.Products
             this.imageOrchestrationService = imageOrchestrationService;
         }
 
-        public async ValueTask<Product> AddProductAsync(Product product)
+        public async ValueTask<Product> AddProductAsync(Product product, 
+            List<IFormFile> images)
         {
             product.ProductId = Guid.NewGuid();
 
             var storedProduct =
                  await this.productProcessingService.AddProductAsync(product);
+
+            if (images != null)
+            {
+                foreach (var image in images)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        string extension = Path.GetExtension(image.FileName);
+                        image.CopyTo(memoryStream);
+                        memoryStream.Position = 0;
+
+                        await this.imageOrchestrationService.StoreImageAsync(
+                            memoryStream, extension, storedProduct.ProductId);
+                    }
+                }
+            }
 
             if (product.ProductAttributes != null)
             {
@@ -46,8 +63,6 @@ namespace MeneMarket.Services.Orchestrations.Products
                     await this.productAttributeService.AddProductAttributeAsync(productAttribute);
                 }
 
-                product.ProductAttributes = null;
-
                 return await this.productProcessingService.RetrieveProductByIdAsync(storedProduct.ProductId);
             }
             else
@@ -55,19 +70,47 @@ namespace MeneMarket.Services.Orchestrations.Products
         }
 
         public IQueryable<Product> RetrieveAllProducts() =>
-             this.productProcessingService.RetrieveAllProducts();
+            this.productProcessingService.RetrieveAllProducts();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.productProcessingService.RetrieveProductByIdAsync(id);
 
-        public async ValueTask<Product> ModifyProductAsync(Product product)
+        public async ValueTask<Product> ModifyProductAsync(Product product, List<IFormFile> images, List<string> imageFilePaths)
         {
-            foreach (var attribute in product.ProductAttributes)
+            if (images != null)
             {
-                await this.productAttributeService.ModifyProductAttributeAsync(attribute);
+                foreach (var image in images)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        string extension = Path.GetExtension(image.FileName);
+                        image.CopyTo(memoryStream);
+                        memoryStream.Position = 0;
+
+                        await this.imageOrchestrationService.StoreImageAsync(
+                            memoryStream, extension, product.ProductId);
+                    }
+                }
             }
 
-            return await this.ModifyProductAsync(product);
+            if (imageFilePaths != null)
+            {
+                foreach (var imageFile in imageFilePaths)
+                {
+                    string imageName = imageFile.Replace(@"imageFiles\\", "");
+                    await this.imageOrchestrationService.RemoveImageFileByFileNameAsync(imageName);
+                }
+            }
+
+            if (product.ProductAttributes != null)
+            {
+                foreach (var attribute in product.ProductAttributes)
+                {
+                    await this.productAttributeService.ModifyProductAttributeAsync(attribute);
+                }
+            }
+
+            return await this.productProcessingService.ModifyProductAsync(product);
         }
 
         public async ValueTask<Product> RemoveProductAsync(Guid id)
@@ -76,9 +119,7 @@ namespace MeneMarket.Services.Orchestrations.Products
                 await this.productProcessingService.RetrieveProductByIdAsync(id);
 
             foreach (var image in product.ImageMetadatas)
-            {
-                imageOrchestrationService.RemoveImageFileByIdAsync(image.Id);
-            }
+                await imageOrchestrationService.RemoveImageFileByIdAsync(image.Id);
 
             return await this.productProcessingService.RemoveProductByIdAsync(id);
         }
