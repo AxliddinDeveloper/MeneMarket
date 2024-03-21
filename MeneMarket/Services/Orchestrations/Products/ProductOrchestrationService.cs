@@ -40,10 +40,18 @@ namespace MeneMarket.Services.Orchestrations.Products
                         image.CopyTo(memoryStream);
                         memoryStream.Position = 0;
 
-                        await this.imageOrchestrationService.StoreImageAsync(
+                        string filePath = await this.imageOrchestrationService.StoreImageAsync(
                             memoryStream, extension, storedProduct.ProductId);
+
+                        if (storedProduct.Images == null)
+                        {
+                            storedProduct.Images = new List<string>();
+                        }
+
+                        storedProduct.Images.Add(filePath);
                     }
                 }
+                await this.productProcessingService.ModifyProductAsync(storedProduct);
             }
 
             if (product.ProductAttributes != null)
