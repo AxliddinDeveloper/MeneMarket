@@ -32,7 +32,6 @@ namespace MeneMarket.Controllers
         }
 
         [HttpGet]
-        [Route("GetAll")]
         public IQueryable<Product> GetAllProducts()
         {
             return productOrchestrationService.RetrieveAllProducts();
