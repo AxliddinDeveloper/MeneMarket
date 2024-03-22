@@ -13,13 +13,11 @@ namespace MeneMarket.Controllers
     public class ProductController : RESTFulController
     {
         private readonly IProductOrchestrationService productOrchestrationService;
-        private readonly IHttpContextAccessor httpContextAccessor;
+
         public ProductController(
-            IProductOrchestrationService productOrchestrationService, 
-            IHttpContextAccessor httpContextAccessor)
+            IProductOrchestrationService productOrchestrationService)
         {
             this.productOrchestrationService = productOrchestrationService;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
@@ -37,9 +35,6 @@ namespace MeneMarket.Controllers
         [Route("GetAll")]
         public IQueryable<Product> GetAllProducts()
         {
-            var userId = 
-                httpContextAccessor.HttpContext.User.FindFirstValue("UserId");
-
             return productOrchestrationService.RetrieveAllProducts();
         }
 

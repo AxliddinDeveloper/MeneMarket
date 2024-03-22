@@ -75,7 +75,7 @@ namespace MeneMarket.Services.Orchestrations.Products
                 throw new InvalidDataException("Product is invalid");
         }
 
-        public IQueryable<Product> RetrieveAllProducts(Guid userId)
+        public IQueryable<Product> RetrieveAllProducts()
         {
 
 
