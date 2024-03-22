@@ -23,7 +23,7 @@ namespace MeneMarket.Services.Foundations.Clients
 
         public async ValueTask<Client> RemoveClientAsync(Guid id)
         {
-            Client selectedClient = 
+            Client selectedClient =
                 await this.storageBroker.SelectClientByIdAsync(id);
 
             return await this.storageBroker.DeleteClientAsync(selectedClient);

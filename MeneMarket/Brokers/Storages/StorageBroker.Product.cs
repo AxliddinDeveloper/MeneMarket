@@ -14,7 +14,6 @@ namespace MeneMarket.Brokers.Storages
         {
             return this.Products
                 .Include(p => p.ProductAttributes)
-                .Include(p => p.ImageMetadatas)
                 .AsQueryable();
         }
 
@@ -22,7 +21,6 @@ namespace MeneMarket.Brokers.Storages
              await this.Products
                 .Include(u => u.ProductAttributes)
                 .Include(u => u.Comments)
-                .Include(u => u.ImageMetadatas)
                 .FirstOrDefaultAsync(u => u.ProductId == productId);
 
         public async ValueTask<Product> UpdateProductAsync(Product product) =>

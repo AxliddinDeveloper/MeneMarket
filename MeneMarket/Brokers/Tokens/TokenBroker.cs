@@ -1,9 +1,9 @@
-﻿using MeneMarket.Models.Foundations.Users;
-using MeneMarket.Models.Orchestrations.Tokens;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MeneMarket.Models.Foundations.Users;
+using MeneMarket.Models.Orchestrations.Tokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MeneMarket.Brokers.Tokens
 {

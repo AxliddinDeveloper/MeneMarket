@@ -1,7 +1,7 @@
 ﻿using MeneMarket.Models.Foundations.ProductAttributes;
 using MeneMarket.Models.Foundations.Products;
 using MeneMarket.Services.Foundations.ProductAttributes;
-using MeneMarket.Services.Orchestrations.Images;
+using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Products;
 
 namespace MeneMarket.Services.Orchestrations.Products
@@ -10,19 +10,19 @@ namespace MeneMarket.Services.Orchestrations.Products
     {
         private readonly IProductProcessingService productProcessingService;
         private readonly IProductAttributeService productAttributeService;
-        private readonly IImageOrchestrationService imageOrchestrationService;
+        private readonly IFileProcessingService fileProcessingService;
 
         public ProductOrchestrationService(
-            IProductProcessingService productProcessingService, 
-            IProductAttributeService productAttributeService,
-            IImageOrchestrationService imageOrchestrationService)
+            IProductProcessingService productProcessingService,
+            IFileProcessingService fileProcessingService,
+            IProductAttributeService productAttributeService)
         {
             this.productProcessingService = productProcessingService;
             this.productAttributeService = productAttributeService;
-            this.imageOrchestrationService = imageOrchestrationService;
+            this.fileProcessingService = fileProcessingService;
         }
 
-        public async ValueTask<Product> AddProductAsync(Product product, 
+        public async ValueTask<Product> AddProductAsync(Product product,
             List<IFormFile> images)
         {
             product.ProductId = Guid.NewGuid();
@@ -36,17 +36,15 @@ namespace MeneMarket.Services.Orchestrations.Products
                 {
                     using (var memoryStream = new MemoryStream())
                     {
-                        string extension = Path.GetExtension(image.FileName);
                         image.CopyTo(memoryStream);
                         memoryStream.Position = 0;
 
-                        string filePath = await this.imageOrchestrationService.StoreImageAsync(
-                            memoryStream, extension, storedProduct.ProductId);
+                        string filePath =
+                            await this.fileProcessingService.UploadFileAsync(
+                                memoryStream, image.FileName);
 
                         if (storedProduct.Images == null)
-                        {
                             storedProduct.Images = new List<string>();
-                        }
 
                         storedProduct.Images.Add(filePath);
                     }
@@ -77,13 +75,20 @@ namespace MeneMarket.Services.Orchestrations.Products
                 throw new InvalidDataException("Product is invalid");
         }
 
-        public IQueryable<Product> RetrieveAllProducts() =>
-            this.productProcessingService.RetrieveAllProducts();
+        public IQueryable<Product> RetrieveAllProducts(Guid userId)
+        {
+
+
+            return this.productProcessingService.RetrieveAllProducts();
+        }
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.productProcessingService.RetrieveProductByIdAsync(id);
 
-        public async ValueTask<Product> ModifyProductAsync(Product product, List<IFormFile> images, List<string> imageFilePaths)
+        public async ValueTask<Product> ModifyProductAsync(
+            Product product, 
+            List<IFormFile> images, 
+            List<string> imageFilePaths)
         {
             if (images != null)
             {
@@ -91,12 +96,10 @@ namespace MeneMarket.Services.Orchestrations.Products
                 {
                     using (var memoryStream = new MemoryStream())
                     {
-                        string extension = Path.GetExtension(image.FileName);
                         image.CopyTo(memoryStream);
                         memoryStream.Position = 0;
 
-                        await this.imageOrchestrationService.StoreImageAsync(
-                            memoryStream, extension, product.ProductId);
+                        await this.fileProcessingService.UploadFileAsync(memoryStream, image.FileName);
                     }
                 }
             }
@@ -106,16 +109,14 @@ namespace MeneMarket.Services.Orchestrations.Products
                 foreach (var imageFile in imageFilePaths)
                 {
                     string imageName = imageFile.Replace(@"imageFiles\\", "");
-                    await this.imageOrchestrationService.RemoveImageFileByFileNameAsync(imageName);
+                    this.fileProcessingService.DeleteImageFile(imageName);
                 }
             }
 
             if (product.ProductAttributes != null)
             {
                 foreach (var attribute in product.ProductAttributes)
-                {
                     await this.productAttributeService.ModifyProductAttributeAsync(attribute);
-                }
             }
 
             return await this.productProcessingService.ModifyProductAsync(product);
@@ -123,11 +124,14 @@ namespace MeneMarket.Services.Orchestrations.Products
 
         public async ValueTask<Product> RemoveProductAsync(Guid id)
         {
-            var product = 
+            var product =
                 await this.productProcessingService.RetrieveProductByIdAsync(id);
 
-            foreach (var image in product.ImageMetadatas)
-                await imageOrchestrationService.RemoveImageFileByIdAsync(image.Id);
+            foreach (var imageFilePath in product.Images)
+            {
+                string imageName = imageFilePath.Replace(@"imageFiles\\", "");
+                fileProcessingService.DeleteImageFile(imageName);
+            }
 
             return await this.productProcessingService.RemoveProductByIdAsync(id);
         }

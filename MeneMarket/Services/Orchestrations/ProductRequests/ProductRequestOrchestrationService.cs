@@ -19,10 +19,10 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
         private readonly IOfferLinkService offerLinkService;
 
         public ProductRequestOrchestrationService(
-            IProductRequestService productRequestService, 
-            IClientService clientService, 
-            IDonationBoxOrchestrationService donationBoxOrchestrationService, 
-            IDonationBoxProcessingService donationBoxProcessingService, 
+            IProductRequestService productRequestService,
+            IClientService clientService,
+            IDonationBoxOrchestrationService donationBoxOrchestrationService,
+            IDonationBoxProcessingService donationBoxProcessingService,
             IOfferLinkService offerLinkService)
         {
             this.productRequestService = productRequestService;
@@ -35,10 +35,10 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
         public async ValueTask<ProductRequest> AddProductRequestAsync(
             ProductRequest productRequest)
         {
-            IQueryable<Client> allClients = 
+            IQueryable<Client> allClients =
                 this.clientService.RetrieveAllClients();
 
-            var client = allClients.FirstOrDefault(c => 
+            var client = allClients.FirstOrDefault(c =>
                 c.IpAddress == productRequest.IpAddress);
 
             if (client == null)
@@ -77,12 +77,12 @@ namespace MeneMarket.Services.Orchestrations.ProductRequests
             IQueryable<Client> allClients =
                 this.clientService.RetrieveAllClients();
 
-            var selectedProductRequest = 
+            var selectedProductRequest =
                 await this.RetrieveProductRequestByIdAsync(productRequest.Id);
 
             var client = allClients.FirstOrDefault(c =>
                 c.IpAddress == productRequest.IpAddress);
-            
+
             if (client != null)
             {
                 var offerLink =

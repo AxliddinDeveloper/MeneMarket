@@ -37,6 +37,7 @@ namespace MeneMarket.Migrations
                     NumberStars = table.Column<short>(type: "INTEGER", nullable: false),
                     ProductOwner = table.Column<string>(type: "TEXT", nullable: true),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsLiked = table.Column<bool>(type: "INTEGER", nullable: false),
                     ProductType = table.Column<int>(type: "INTEGER", nullable: false),
                     Images = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -56,7 +57,8 @@ namespace MeneMarket.Migrations
                     Password = table.Column<string>(type: "TEXT", nullable: true),
                     Balance = table.Column<decimal>(type: "TEXT", nullable: false),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
-                    Role = table.Column<int>(type: "INTEGER", nullable: false)
+                    Role = table.Column<int>(type: "INTEGER", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -83,27 +85,6 @@ namespace MeneMarket.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ImageMetadatas",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Size = table.Column<float>(type: "REAL", nullable: false),
-                    Format = table.Column<int>(type: "INTEGER", nullable: false),
-                    FilePath = table.Column<string>(type: "TEXT", nullable: true),
-                    ProductId = table.Column<Guid>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ImageMetadatas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ImageMetadatas_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId");
                 });
 
             migrationBuilder.CreateTable(
@@ -272,11 +253,6 @@ namespace MeneMarket.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageMetadatas_ProductId",
-                table: "ImageMetadatas",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OfferLinks_ProductId",
                 table: "OfferLinks",
                 column: "ProductId");
@@ -311,9 +287,6 @@ namespace MeneMarket.Migrations
 
             migrationBuilder.DropTable(
                 name: "DonatedUsers");
-
-            migrationBuilder.DropTable(
-                name: "ImageMetadatas");
 
             migrationBuilder.DropTable(
                 name: "ProductAttributes");

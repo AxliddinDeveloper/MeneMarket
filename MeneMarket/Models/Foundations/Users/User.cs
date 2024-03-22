@@ -15,11 +15,12 @@ namespace MeneMarket.Models.Foundations.Users
         public string Email { get; set; }
         public string Password { get; set; }
         public decimal Balance { get; set; }
-        public bool IsArchived {  get; set; }
+        public bool IsArchived { get; set; }
         public Role Role { get; set; }
-        public virtual ICollection<OfferLink> OfferLinks  { get; set; }
+        public string Image { get; set; }
+        public virtual ICollection<OfferLink> OfferLinks { get; set; }
         public virtual ICollection<BalanceHistory> BalanceHistorys { get; set; }
         [JsonIgnore]
-        public virtual ICollection<DonatedUser> DonatedUsers { get; set;}
+        public virtual ICollection<DonatedUser> DonatedUsers { get; set; }
     }
 }

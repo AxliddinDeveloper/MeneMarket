@@ -29,7 +29,7 @@ namespace MeneMarket.Services.Foundations.DonationBoxes
 
         public async ValueTask<DonationBox> RemoveDonationBoxAsync(Guid id)
         {
-            DonationBox donationBox = 
+            DonationBox donationBox =
                 await this.storageBroker.SelectDonationBoxByIdAsync(id);
 
             return await this.storageBroker.DeleteDonationBoxAsync(donationBox);

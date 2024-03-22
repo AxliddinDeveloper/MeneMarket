@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240318073420_CreateAllTables")]
+    [Migration("20240322104230_CreateAllTables")]
     partial class CreateAllTables
     {
         /// <inheritdoc />
@@ -134,34 +134,6 @@ namespace MeneMarket.Migrations
                     b.ToTable("Donations");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FilePath")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Format")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<float>("Size")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ImageMetadatas");
-                });
-
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
                 {
                     b.Property<Guid>("OfferLinkId")
@@ -275,6 +247,9 @@ namespace MeneMarket.Migrations
                     b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("IsLiked")
+                        .HasColumnType("INTEGER");
+
                     b.Property<short>("NumberSold")
                         .HasColumnType("INTEGER");
 
@@ -311,6 +286,9 @@ namespace MeneMarket.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsArchived")
@@ -382,15 +360,6 @@ namespace MeneMarket.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
-                {
-                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
-                        .WithMany("ImageMetadatas")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -445,8 +414,6 @@ namespace MeneMarket.Migrations
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("ImageMetadatas");
 
                     b.Navigation("OfferLinks");
 

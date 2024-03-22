@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Users;
+using MeneMarket.Models.Orchestrations.UserWithImages;
 using MeneMarket.Services.Orchestrations.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,8 +35,8 @@ namespace MeneMarket.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Admin,User")]
-        public async ValueTask<ActionResult<User>> PutUserAsync(User user) =>
-            await this.userOrchestrationService.ModifyUserAsync(user);
+        public async ValueTask<ActionResult<User>> PutUserAsync(UserWithImages userWithImages) =>
+            await this.userOrchestrationService.ModifyUserAsync(userWithImages.User, userWithImages.Image);
 
         [HttpDelete]
         [Authorize(Roles = "Admin")]

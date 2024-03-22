@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using MeneMarket.Models.Foundations.Comments;
-using MeneMarket.Models.Foundations.ImageMetadatas;
 using MeneMarket.Models.Foundations.OfferLinks;
 using MeneMarket.Models.Foundations.ProductAttributes;
 
@@ -18,11 +17,10 @@ namespace MeneMarket.Models.Foundations.Products
         public short NumberStars { get; set; }
         public string ProductOwner { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsLiked { get; set; }
         public ProductType ProductType { get; set; }
-        [JsonIgnore]
         public List<string> Images { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
-        public virtual ICollection<ImageMetadata> ImageMetadatas { get; set; }
         public virtual ICollection<ProductAttribute> ProductAttributes { get; set; }
         [JsonIgnore]
         public virtual ICollection<OfferLink> OfferLinks { get; set; }

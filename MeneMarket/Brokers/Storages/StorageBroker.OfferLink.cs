@@ -1,5 +1,4 @@
 ﻿using MeneMarket.Models.Foundations.OfferLinks;
-using MeneMarket.Models.Foundations.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeneMarket.Brokers.Storages

@@ -9,7 +9,7 @@ namespace MeneMarket.Models.Foundations.OfferLinks
     {
         public Guid OfferLinkId { get; set; }
         public string Name { get; set; }
-        public string Link {  get; set; }
+        public string Link { get; set; }
         public bool AllowDonation { get; set; }
         public decimal DonationPrice { get; set; }
         public Guid ProductId { get; set; }

@@ -22,7 +22,7 @@ namespace MeneMarket.Controllers
 
             string ipAddress = httpContext.Connection.RemoteIpAddress?.ToString();
 
-            var productLink = 
+            var productLink =
                 await this.clientOrchestrationService.AddClientAsync(id, ipAddress);
 
             return Ok(productLink);

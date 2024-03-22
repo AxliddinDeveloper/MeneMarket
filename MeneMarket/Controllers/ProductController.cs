@@ -1,4 +1,5 @@
-﻿using MeneMarket.Models.Foundations.Products;
+﻿using System.Security.Claims;
+using MeneMarket.Models.Foundations.Products;
 using MeneMarket.Models.Orchestrations.ProductWithImages;
 using MeneMarket.Services.Orchestrations.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -12,26 +13,35 @@ namespace MeneMarket.Controllers
     public class ProductController : RESTFulController
     {
         private readonly IProductOrchestrationService productOrchestrationService;
-
+        private readonly IHttpContextAccessor httpContextAccessor;
         public ProductController(
-            IProductOrchestrationService productOrchestrationService)
+            IProductOrchestrationService productOrchestrationService, 
+            IHttpContextAccessor httpContextAccessor)
         {
             this.productOrchestrationService = productOrchestrationService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PostProductAsync([FromForm] ProductWithImages request)
+        public async ValueTask<ActionResult<Product>> PostProductAsync([FromForm]ProductWithImages request)
         {
             Product product = request.Product;
+            product.ProductAttributes = request.ProductAttributes;
             List<IFormFile> images = request.Images;
 
             return await this.productOrchestrationService.AddProductAsync(product, images);
         }
 
         [HttpGet]
-        public IQueryable<Product> GelAllProducts() =>
-            this.productOrchestrationService.RetrieveAllProducts();
+        [Route("GetAll")]
+        public IQueryable<Product> GetAllProducts()
+        {
+            var userId = 
+                httpContextAccessor.HttpContext.User.FindFirstValue("UserId");
+
+            return productOrchestrationService.RetrieveAllProducts();
+        }
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<Product>> GetProductByIdAsync(Guid id) =>

@@ -17,9 +17,9 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
         private readonly IDonatedUserService donatedUserService;
 
         public DonationBoxOrchestrationService(
-            IOfferLinkService offerLinkService, 
-            IUserOrchestrationService userOrchestrationService, 
-            IProductProcessingService productProcessingService, 
+            IOfferLinkService offerLinkService,
+            IUserOrchestrationService userOrchestrationService,
+            IProductProcessingService productProcessingService,
             IDonationBoxProcessingService donationBoxProcessingService,
             IDonatedUserService donatedUserService)
         {
@@ -43,10 +43,10 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
             await this.donationBoxProcessingService.RetrieveDonationBoxByIdAsync(id);
 
         public async ValueTask<DonationBox> ModifyDonationBoxAsync(
-            DonationBox donationBox, 
+            DonationBox donationBox,
             Guid id, bool outBalance)
         {
-            var selectedOfferLink = 
+            var selectedOfferLink =
                 await this.offerLinkService.RetrieveOfferLinkByIdAsync(id);
 
             var selectedUser =
@@ -68,8 +68,8 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
                 IQueryable<DonatedUser> allDonatedUsers =
                   this.donatedUserService.RetrieveAllDonatedUsers();
 
-                DonatedUser ExsistsDonatedUsers = 
-                    allDonatedUsers.FirstOrDefault(d => 
+                DonatedUser ExsistsDonatedUsers =
+                    allDonatedUsers.FirstOrDefault(d =>
                         d.UserId == selectedUser.UserId);
 
                 DonatedUser donatedUser = new DonatedUser
@@ -89,8 +89,8 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
                     ExsistsDonatedUsers.DonationPrice += selectedOfferLink.DonationPrice;
                     await this.donatedUserService.ModifyDonatedUserAsync(donatedUser);
                 }
-                
-                await this.userOrchestrationService.ModifyUserAsync(selectedUser);
+
+                await this.userOrchestrationService.ModifyUserAsync(selectedUser, null);
 
                 return await this.donationBoxProcessingService.ModifyDonationBoxAsync(donationBox);
             }
@@ -105,7 +105,7 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
 
                 DonatedUser ExsistsdonatedUsers =
                     allDonatedUsers.FirstOrDefault(d =>
-                        d.UserId == selectedUser.UserId && 
+                        d.UserId == selectedUser.UserId &&
                         d.DonationBoxId == donationBox.DonationBoxId);
 
                 if (ExsistsdonatedUsers != null)
@@ -113,9 +113,8 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
                     ExsistsdonatedUsers.DonationPrice -= selectedOfferLink.DonationPrice;
                     await this.donatedUserService.ModifyDonatedUserAsync(ExsistsdonatedUsers);
                 }
-                
 
-                await this.userOrchestrationService.ModifyUserAsync(selectedUser);
+                await this.userOrchestrationService.ModifyUserAsync(selectedUser, null);
 
                 return await this.donationBoxProcessingService.ModifyDonationBoxAsync(donationBox);
             }

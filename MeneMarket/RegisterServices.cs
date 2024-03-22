@@ -7,7 +7,6 @@ using MeneMarket.Services.Foundations.Comments;
 using MeneMarket.Services.Foundations.DonatedUsers;
 using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
-using MeneMarket.Services.Foundations.ImageMetadatas;
 using MeneMarket.Services.Foundations.OfferLinks;
 using MeneMarket.Services.Foundations.ProductAttributes;
 using MeneMarket.Services.Foundations.ProductRequests;
@@ -16,14 +15,12 @@ using MeneMarket.Services.Foundations.Tokens;
 using MeneMarket.Services.Foundations.Users;
 using MeneMarket.Services.Orchestrations.Clients;
 using MeneMarket.Services.Orchestrations.DonationBoxes;
-using MeneMarket.Services.Orchestrations.Images;
 using MeneMarket.Services.Orchestrations.ProductRequests;
 using MeneMarket.Services.Orchestrations.Products;
 using MeneMarket.Services.Orchestrations.Users;
 using MeneMarket.Services.Processings.BalanceHistorys;
 using MeneMarket.Services.Processings.DonationBoxes;
 using MeneMarket.Services.Processings.Files;
-using MeneMarket.Services.Processings.Images;
 using MeneMarket.Services.Processings.Products;
 using MeneMarket.Services.Processings.Users;
 
@@ -46,7 +43,6 @@ namespace MeneMarket
             builder.Services.AddTransient<IClientService, ClientService>();
             builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();
             builder.Services.AddTransient<IFileService, FileService>();
-            builder.Services.AddTransient<IImageMetadataService, ImageMetadataService>();
             builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
             builder.Services.AddTransient<IProductAttributeService, ProductAttributeService>();
             builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
@@ -62,7 +58,6 @@ namespace MeneMarket
             builder.Services.AddTransient<IFileProcessingService, FileProcessingService>();
             builder.Services.AddTransient<IUserProcessingService, UserProcessingService>();
             builder.Services.AddTransient<IProductProcessingService, ProductProcessingService>();
-            builder.Services.AddTransient<IImageMetadataProcessingService, ImageMetadataProcessingService>();
         }
 
         public void AddOrchestrationServices(WebApplicationBuilder builder)
@@ -73,7 +68,6 @@ namespace MeneMarket
             builder.Services.AddTransient<IProductRequestOrchestrationService, ProductRequestOrchestrationService>();
             builder.Services.AddTransient<IUserOrchestrationService, UserOrchestrationService>();
             builder.Services.AddTransient<IUserSecurityOrchestrationService, UserSecurityOrchestrationService>();
-            builder.Services.AddTransient<IImageOrchestrationService, ImageOrchestrationService>();
         }
     }
 }

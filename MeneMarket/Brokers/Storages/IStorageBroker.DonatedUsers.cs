@@ -1,5 +1,4 @@
-﻿using MeneMarket.Models.Foundations.Comments;
-using MeneMarket.Models.Foundations.DonatedUsers;
+﻿using MeneMarket.Models.Foundations.DonatedUsers;
 
 namespace MeneMarket.Brokers.Storages
 {

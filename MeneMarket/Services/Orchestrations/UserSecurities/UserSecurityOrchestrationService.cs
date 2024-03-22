@@ -12,7 +12,7 @@ namespace MeneMarket.Services.Orchestrations.Users
         private readonly ITokenService tokenService;
 
         public UserSecurityOrchestrationService(
-            IUserProcessingService userProcessingService, 
+            IUserProcessingService userProcessingService,
             ITokenService tokenService)
         {
             this.userProcessingService = userProcessingService;
@@ -32,6 +32,11 @@ namespace MeneMarket.Services.Orchestrations.Users
             var result = allUsers.FirstOrDefault(retrievedUser =>
             retrievedUser.Email.Equals(loginUser.Email)
                     && retrievedUser.Password.Equals(loginUser.Password));
+
+            if (result == null)
+            {
+                throw new Exception("Foydalanuvchi Topilmadi");
+            }
 
             return this.tokenService.AddToken(result);
         }

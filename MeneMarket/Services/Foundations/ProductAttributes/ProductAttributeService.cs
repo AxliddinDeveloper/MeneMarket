@@ -33,7 +33,7 @@ namespace MeneMarket.Services.Foundations.ProductAttributes
             ProductAttribute mayBeProductAttribute =
                 await this.storageBroker.SelectProductAttributeByIdAsync(id);
 
-             return await this.storageBroker.DeleteProductAttributeAsync(mayBeProductAttribute);
+            return await this.storageBroker.DeleteProductAttributeAsync(mayBeProductAttribute);
         }
     }
 }

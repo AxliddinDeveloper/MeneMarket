@@ -1,5 +1,4 @@
 ﻿using MeneMarket.Models.Foundations.ProductRequests;
-using MeneMarket.Models.Foundations.Users;
 
 namespace MeneMarket.Brokers.Storages
 {

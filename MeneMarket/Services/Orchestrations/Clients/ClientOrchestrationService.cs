@@ -10,7 +10,7 @@ namespace MeneMarket.Services.Orchestrations.Clients
         private readonly IOfferLinkService offerLinkService;
 
         public ClientOrchestrationService(
-            IClientService clientService, 
+            IClientService clientService,
             IOfferLinkService offerLinkService)
         {
             this.clientService = clientService;
@@ -19,17 +19,26 @@ namespace MeneMarket.Services.Orchestrations.Clients
 
         public async ValueTask<string> AddClientAsync(Guid id, string ipAddress)
         {
-            var client = new Client
+            IQueryable<Client> allClients =
+                this.clientService.RetrieveAllClients();
+
+            var existedClient =
+                allClients.FirstOrDefault(c =>
+                c.IpAddress == ipAddress);
+
+            if (existedClient == null)
             {
-                ClientId = Guid.NewGuid(),
-                IpAddress = ipAddress,
-                StatusType = StatusType.Visit,
-                OfferLinkId = id
-            };
+                var client = new Client
+                {
+                    ClientId = Guid.NewGuid(),
+                    IpAddress = ipAddress,
+                    StatusType = StatusType.Visit,
+                    OfferLinkId = id
+                };
+                await clientService.AddClientAsync(client);
+            }
 
-            await clientService.AddClientAsync(client);
-
-            var selectedOfferLink = 
+            var selectedOfferLink =
                 await this.offerLinkService.RetrieveOfferLinkByIdAsync(id);
 
             return selectedOfferLink.Link;
