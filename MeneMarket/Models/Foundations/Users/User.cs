@@ -17,7 +17,7 @@ namespace MeneMarket.Models.Foundations.Users
         public decimal Balance { get; set; }
         public bool IsArchived { get; set; }
         public Role Role { get; set; }
-        public string Image { get; set; }
+        public string Image { get; set; }   
         public virtual ICollection<OfferLink> OfferLinks { get; set; }
         public virtual ICollection<BalanceHistory> BalanceHistorys { get; set; }
         [JsonIgnore]

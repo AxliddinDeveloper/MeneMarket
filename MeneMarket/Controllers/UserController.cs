@@ -35,8 +35,22 @@ namespace MeneMarket.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Admin,User")]
-        public async ValueTask<ActionResult<User>> PutUserAsync(UserWithImages userWithImages) =>
-            await this.userOrchestrationService.ModifyUserAsync(userWithImages.User, userWithImages.Image);
+        public async ValueTask<ActionResult<User>> PutUserAsync(UserWithImages userWithImages)
+        {
+            var user = new User
+            {
+                UserId = userWithImages.UserId,
+                FirstName = userWithImages.FirstName,
+                LastName = userWithImages.LastName,
+                Email = userWithImages.Email,
+                Password = userWithImages.Password,
+                Balance = userWithImages.Balance,
+                IsArchived = userWithImages.IsArchived,
+                Role = userWithImages.Role,
+            };
+
+            return await this.userOrchestrationService.ModifyUserAsync(user, userWithImages.Image);
+        }
 
         [HttpDelete]
         [Authorize(Roles = "Admin")]
