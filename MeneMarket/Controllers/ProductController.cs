@@ -22,13 +22,11 @@ namespace MeneMarket.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PostProductAsync([FromForm]ProductWithImages request)
+        public async ValueTask<ActionResult<Product>> PostProductAsync(ProductWithImages request)
         {
             Product product = request.Product;
-            product.ProductAttributes = request.ProductAttributes;
-            List<IFormFile> images = request.Images;
 
-            return await this.productOrchestrationService.AddProductAsync(product, images);
+            return await this.productOrchestrationService.AddProductAsync(product, null);
         }
 
         [HttpGet]
@@ -46,10 +44,9 @@ namespace MeneMarket.Controllers
         public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages)
         {
             var product = productWithImages.Product;
-            List<IFormFile> images = productWithImages.Images;
             List<string> imageFilePaths = productWithImages.ImageFilePaths;
 
-            return await this.productOrchestrationService.ModifyProductAsync(product, images, imageFilePaths);
+            return await this.productOrchestrationService.ModifyProductAsync(product, null, imageFilePaths);
         }
 
         [HttpDelete]

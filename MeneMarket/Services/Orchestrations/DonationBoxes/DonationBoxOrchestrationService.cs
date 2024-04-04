@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.DonatedUsers;
 using MeneMarket.Models.Foundations.DonationBoxes;
+using MeneMarket.Models.Orchestrations.UserWithImages;
 using MeneMarket.Services.Foundations.DonatedUsers;
 using MeneMarket.Services.Foundations.OfferLinks;
 using MeneMarket.Services.Orchestrations.Users;
@@ -89,8 +90,11 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
                     ExsistsDonatedUsers.DonationPrice += selectedOfferLink.DonationPrice;
                     await this.donatedUserService.ModifyDonatedUserAsync(donatedUser);
                 }
-
-                await this.userOrchestrationService.ModifyUserAsync(selectedUser, null);
+                var userWithImages = new UserWithImages
+                {
+                    User = selectedUser,
+                };
+                await this.userOrchestrationService.ModifyUserAsync(userWithImages);
 
                 return await this.donationBoxProcessingService.ModifyDonationBoxAsync(donationBox);
             }
@@ -114,7 +118,11 @@ namespace MeneMarket.Services.Orchestrations.DonationBoxes
                     await this.donatedUserService.ModifyDonatedUserAsync(ExsistsdonatedUsers);
                 }
 
-                await this.userOrchestrationService.ModifyUserAsync(selectedUser, null);
+                var userWithImages = new UserWithImages
+                {
+                    User = selectedUser,
+                };
+                await this.userOrchestrationService.ModifyUserAsync(userWithImages);
 
                 return await this.donationBoxProcessingService.ModifyDonationBoxAsync(donationBox);
             }

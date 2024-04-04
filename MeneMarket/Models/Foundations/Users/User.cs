@@ -11,11 +11,14 @@ namespace MeneMarket.Models.Foundations.Users
         public Guid UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
+        [Required]
         public string Password { get; set; }
         public decimal Balance { get; set; }
         public bool IsArchived { get; set; }
+        [Required]
         public Role Role { get; set; }
         public string Image { get; set; }   
         public virtual ICollection<OfferLink> OfferLinks { get; set; }

@@ -1,5 +1,4 @@
 using System.Text;
-using FluentAssertions.Common;
 using MeneMarket;
 using MeneMarket.Brokers.Storages;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
