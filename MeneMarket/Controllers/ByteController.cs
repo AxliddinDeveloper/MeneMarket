@@ -1,4 +1,4 @@
-﻿using MeneMarket.Services.Foundations.Files;
+﻿using MeneMarket.Models.Orchestrations.ImageBytes;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
@@ -9,20 +9,21 @@ namespace MeneMarket.Controllers
     public class ByteController : RESTFulController
     {
         [HttpPost]
-        public async Task<IActionResult> UploadByte(string base64String)
+        [Route("Upload")]
+        public async ValueTask<string> UploadByte(ImageBytes imageBytes)
         {
             try
             {
-                byte[] bytes = Convert.FromBase64String(base64String);
-                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                byte[] bytes = Convert.FromBase64String(imageBytes.Byte64String);
+                string fileName =  "yuklanganrasm.jpg";
                 string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
                 await System.IO.File.WriteAllBytesAsync(filePath, bytes);
-
-                return Ok(fileName);
+                int sizeInBytes = System.Text.Encoding.Unicode.GetByteCount(imageBytes.Byte64String);
+                return $"{fileName} -------- {sizeInBytes}";
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                throw new Exception(ex.Message);
             }
         }
     }

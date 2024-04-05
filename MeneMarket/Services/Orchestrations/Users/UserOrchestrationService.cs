@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using System.Security.Claims;
 using EFxceptions.Models.Exceptions;
 using MeneMarket.Models.Foundations.BalanceHistorys;
 using MeneMarket.Models.Foundations.Users;
+using MeneMarket.Models.Orchestrations.ImageBytes;
 using MeneMarket.Models.Orchestrations.UserWithImages;
 using MeneMarket.Services.Processings.BalanceHistorys;
 using MeneMarket.Services.Processings.Files;
@@ -31,17 +33,26 @@ namespace MeneMarket.Services.Orchestrations.Users
         public async ValueTask<User> RetrieveUserByIdAsync(Guid id) =>
             await this.userProcessingService.RetrieveUserByIdAsync(id);
 
+        public async ValueTask<User> RetrieveUserProfileAsync(ClaimsPrincipal user)
+        {
+            var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == "UserId");
+            Guid.TryParse(userIdClaim.Value, out Guid userId);
+
+            return await this.userProcessingService.RetrieveUserByIdAsync(userId);
+        }
+
         public async ValueTask<User> ModifyUserAsync(UserWithImages userWithImages)
         {
             decimal amount;
 
             User retrievedUser =
                 await this.userProcessingService.RetrieveUserByIdAsync(userWithImages.User.UserId);
-
-            if (retrievedUser != null && string.IsNullOrEmpty(retrievedUser.Image) && userWithImages.bytes != null)
+            
+            if (retrievedUser != null &&  userWithImages.bytes != null && userWithImages.bytes != "string")
             {
-                string fileName = Guid.NewGuid().ToString();
-                var memoryStream = ConvertBytesToMemoryStream(userWithImages.bytes);
+                string fileName = Guid.NewGuid().ToString() + ".jpg";
+                byte[] bytes = Convert.FromBase64String(userWithImages.bytes);
+                var memoryStream = ConvertBytesToMemoryStream(bytes);
 
                 string filePath = await this.fileProcessingService.UploadFileAsync(
                     memoryStream, fileName);

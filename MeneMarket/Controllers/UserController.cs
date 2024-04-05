@@ -26,10 +26,19 @@ namespace MeneMarket.Controllers
             return Ok(allUsers);
         }
 
-        [HttpGet("ById")]
+        [HttpGet("Profile")]
         [Authorize(Roles = "Admin,User")]
-        public async ValueTask<ActionResult<User>> GetUserByIdAsync(Guid id) =>
-            await this.userOrchestrationService.RetrieveUserByIdAsync(id);
+        public async ValueTask<ActionResult<User>> GetUserProfileAsync()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+
+            if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
+            {
+                return BadRequest("UserId is not in a valid format.");
+            }
+
+            return await this.userOrchestrationService.RetrieveUserProfileAsync(User);
+        }
 
         [HttpPut]
         [Authorize(Roles = "Admin,User")]
