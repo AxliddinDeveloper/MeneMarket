@@ -5,7 +5,7 @@ namespace MeneMarket.Services.Orchestrations.Products
     public interface IProductOrchestrationService
     {
         ValueTask<Product> AddProductAsync(Product product,
-            List<IFormFile> images);
+            List<string> bytes);
 
         IQueryable<Product> RetrieveAllProducts();
         ValueTask<Product> RetrieveProductByIdAsync(Guid id);

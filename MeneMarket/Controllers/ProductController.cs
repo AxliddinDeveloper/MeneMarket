@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using MeneMarket.Models.Foundations.Products;
+﻿using MeneMarket.Models.Foundations.Products;
 using MeneMarket.Models.Orchestrations.ProductWithImages;
 using MeneMarket.Services.Orchestrations.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -22,18 +21,12 @@ namespace MeneMarket.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PostProductAsync(ProductWithImages request)
-        {
-            Product product = request.Product;
-
-            return await this.productOrchestrationService.AddProductAsync(product, null);
-        }
+        public async ValueTask<ActionResult<Product>> PostProductAsync(ProductWithImages productWithImages) =>
+            await this.productOrchestrationService.AddProductAsync(productWithImages.Product, productWithImages.bytes);
 
         [HttpGet]
-        public IQueryable<Product> GetAllProducts()
-        {
-            return productOrchestrationService.RetrieveAllProducts();
-        }
+        public IQueryable<Product> GetAllProducts() =>
+            productOrchestrationService.RetrieveAllProducts();
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<Product>> GetProductByIdAsync(Guid id) =>

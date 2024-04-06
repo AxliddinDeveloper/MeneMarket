@@ -1,5 +1,6 @@
 ﻿using MeneMarket.Models.Foundations.ProductAttributes;
 using MeneMarket.Models.Foundations.Products;
+using MeneMarket.Models.Orchestrations.UserWithImages;
 using MeneMarket.Services.Foundations.ProductAttributes;
 using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Products;
@@ -23,31 +24,27 @@ namespace MeneMarket.Services.Orchestrations.Products
         }
 
         public async ValueTask<Product> AddProductAsync(Product product,
-            List<IFormFile> images)
+            List<string> bytes64String)
         {
             product.ProductId = Guid.NewGuid();
 
             var storedProduct =
                  await this.productProcessingService.AddProductAsync(product);
 
-            if (images != null)
+            if (bytes64String != null)
             {
-                foreach (var image in images)
+                foreach (var byte64String in bytes64String)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        image.CopyTo(memoryStream);
-                        memoryStream.Position = 0;
-
-                        string filePath =
+                    string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    byte[] bytes = Convert.FromBase64String(byte64String);
+                    var memoryStream = ConvertBytesToMemoryStream(bytes);
+                    string filePath =
                             await this.fileProcessingService.UploadFileAsync(
-                                memoryStream, image.FileName);
+                                memoryStream, fileName);
 
-                        if (storedProduct.Images == null)
-                            storedProduct.Images = new List<string>();
+                     storedProduct.Images = new List<string>();
 
-                        storedProduct.Images.Add(filePath);
-                    }
+                    storedProduct.Images.Add(filePath);
                 }
                 await this.productProcessingService.ModifyProductAsync(storedProduct);
             }
@@ -75,12 +72,8 @@ namespace MeneMarket.Services.Orchestrations.Products
                 throw new InvalidDataException("Product is invalid");
         }
 
-        public IQueryable<Product> RetrieveAllProducts()
-        {
-
-
-            return this.productProcessingService.RetrieveAllProducts();
-        }
+        public IQueryable<Product> RetrieveAllProducts() =>
+            this.productProcessingService.RetrieveAllProducts();
 
         public async ValueTask<Product> RetrieveProductByIdAsync(Guid id) =>
             await this.productProcessingService.RetrieveProductByIdAsync(id);
@@ -134,6 +127,12 @@ namespace MeneMarket.Services.Orchestrations.Products
             }
 
             return await this.productProcessingService.RemoveProductByIdAsync(id);
+        }
+
+        public MemoryStream ConvertBytesToMemoryStream(byte[] bytes)
+        {
+            MemoryStream memoryStream = new MemoryStream(bytes);
+            return memoryStream;
         }
     }
 }
