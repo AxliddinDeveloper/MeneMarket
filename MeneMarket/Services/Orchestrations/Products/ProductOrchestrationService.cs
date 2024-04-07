@@ -79,29 +79,31 @@ namespace MeneMarket.Services.Orchestrations.Products
             await this.productProcessingService.RetrieveProductByIdAsync(id);
 
         public async ValueTask<Product> ModifyProductAsync(
-            Product product, 
-            List<IFormFile> images, 
+            Product product,
+           List<string> bytes64String, 
             List<string> imageFilePaths)
         {
-            if (images != null)
+            if (bytes64String != null)
             {
-                foreach (var image in images)
+                foreach (var byte64String in bytes64String)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        image.CopyTo(memoryStream);
-                        memoryStream.Position = 0;
+                    string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    byte[] bytes = Convert.FromBase64String(byte64String);
+                    var memoryStream = ConvertBytesToMemoryStream(bytes);
+                    string filePath =
+                            await this.fileProcessingService.UploadFileAsync(
+                                memoryStream, fileName);
 
-                        await this.fileProcessingService.UploadFileAsync(memoryStream, image.FileName);
-                    }
+                    product.Images.Add(filePath);
                 }
             }
 
             if (imageFilePaths != null)
             {
-                foreach (var imageFile in imageFilePaths)
+                foreach (var imageFilePath in imageFilePaths)
                 {
-                    string imageName = imageFile.Replace(@"imageFiles\\", "");
+                    product.Images.Remove(imageFilePath);
+                    string imageName = Path.GetFileName(imageFilePath);
                     this.fileProcessingService.DeleteImageFile(imageName);
                 }
             }
@@ -109,7 +111,13 @@ namespace MeneMarket.Services.Orchestrations.Products
             if (product.ProductAttributes != null)
             {
                 foreach (var attribute in product.ProductAttributes)
-                    await this.productAttributeService.ModifyProductAttributeAsync(attribute);
+                {
+                    var productAttribute = await this.productAttributeService.RetrieveProductAttributeByIdAsync(attribute.ProductAttributeId);
+                    if (productAttribute != null)
+                        await this.productAttributeService.ModifyProductAttributeAsync(attribute);
+                    else
+                        await this.productAttributeService.AddProductAttributeAsync(attribute);
+                }
             }
 
             return await this.productProcessingService.ModifyProductAsync(product);

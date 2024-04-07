@@ -34,13 +34,11 @@ namespace MeneMarket.Controllers
 
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages)
-        {
-            var product = productWithImages.Product;
-            List<string> imageFilePaths = productWithImages.ImageFilePaths;
-
-            return await this.productOrchestrationService.ModifyProductAsync(product, null, imageFilePaths);
-        }
+        public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages) =>
+            await this.productOrchestrationService.ModifyProductAsync(
+                productWithImages.Product, 
+                productWithImages.bytes, 
+                productWithImages.ImageFilePaths);
 
         [HttpDelete]
         [Authorize(Roles = "Admin")]

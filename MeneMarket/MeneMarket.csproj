@@ -26,4 +26,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imageFiles\" />
+  </ItemGroup>
+
 </Project>
