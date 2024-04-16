@@ -24,7 +24,7 @@ namespace MeneMarket.Brokers.Tokens
 
             var securityToken = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddHours(10),
+                expires: DateTime.Now.AddDays(10),
                 signingCredentials: signingCred
             );
 

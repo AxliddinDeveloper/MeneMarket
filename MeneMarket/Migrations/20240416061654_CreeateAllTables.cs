@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MeneMarket.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateAllTables : Migration
+    public partial class CreeateAllTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,7 @@ namespace MeneMarket.Migrations
                     ProductOwner = table.Column<string>(type: "TEXT", nullable: true),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsLiked = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ProductType = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductType = table.Column<string>(type: "TEXT", nullable: true),
                     Images = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -53,8 +53,8 @@ namespace MeneMarket.Migrations
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     FirstName = table.Column<string>(type: "TEXT", nullable: true),
                     LastName = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true),
-                    Password = table.Column<string>(type: "TEXT", nullable: true),
+                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
                     Balance = table.Column<decimal>(type: "TEXT", nullable: false),
                     IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
                     Role = table.Column<int>(type: "INTEGER", nullable: false),
@@ -73,7 +73,7 @@ namespace MeneMarket.Migrations
                     IpAddress = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
-                    Quality = table.Column<int>(type: "INTEGER", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

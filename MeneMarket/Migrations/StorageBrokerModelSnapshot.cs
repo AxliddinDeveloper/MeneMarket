@@ -80,8 +80,8 @@ namespace MeneMarket.Migrations
                     b.Property<Guid>("ProductId")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Quality")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
@@ -259,8 +259,8 @@ namespace MeneMarket.Migrations
                     b.Property<string>("ProductOwner")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductType")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("ProductType")
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("ScidPrice")
                         .HasColumnType("TEXT");
@@ -280,6 +280,7 @@ namespace MeneMarket.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
@@ -295,6 +296,7 @@ namespace MeneMarket.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Role")
