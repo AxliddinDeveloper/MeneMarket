@@ -45,7 +45,8 @@ namespace MeneMarket.Services.Orchestrations.Products
                             await this.fileProcessingService.UploadFileAsync(
                                 memoryStream, fileName);
 
-                     storedProduct.Images = new List<string>();
+                    if (storedProduct.Images == null)
+                         storedProduct.Images = new List<string>();
 
                     storedProduct.Images.Add(filePath);
                 }
