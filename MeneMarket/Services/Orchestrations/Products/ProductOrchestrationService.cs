@@ -28,8 +28,11 @@ namespace MeneMarket.Services.Orchestrations.Products
         {
             product.ProductId = Guid.NewGuid();
 
+            if (product.ProductAttributes == null)
+                throw new ArgumentNullException("Product Attribute is null");
+
             var storedProduct =
-                 await this.productProcessingService.AddProductAsync(product);
+               await this.productProcessingService.AddProductAsync(product);
 
             if (bytes64String != null)
             {
