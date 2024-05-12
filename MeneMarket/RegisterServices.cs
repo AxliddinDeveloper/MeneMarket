@@ -8,7 +8,7 @@ using MeneMarket.Services.Foundations.DonatedUsers;
 using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
 using MeneMarket.Services.Foundations.OfferLinks;
-using MeneMarket.Services.Foundations.ProductAttributes;
+using MeneMarket.Services.Foundations.ProductTypes;
 using MeneMarket.Services.Foundations.ProductRequests;
 using MeneMarket.Services.Foundations.Products;
 using MeneMarket.Services.Foundations.Tokens;
@@ -23,6 +23,7 @@ using MeneMarket.Services.Processings.DonationBoxes;
 using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Products;
 using MeneMarket.Services.Processings.Users;
+using MeneMarket.Services.Foundations.ImageMetadatas;
 
 namespace MeneMarket
 {
@@ -37,6 +38,7 @@ namespace MeneMarket
 
         public void AddFoundationServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddTransient<IImageMetadataService, ImageMetadataService>();
             builder.Services.AddTransient<IDonatedUserService, DonatedUserService>();
             builder.Services.AddTransient<ICommentService, CommentService>();
             builder.Services.AddTransient<IBalanceHistoryService, BalanceHistoryService>();
@@ -44,7 +46,7 @@ namespace MeneMarket
             builder.Services.AddTransient<IDonationBoxService, DonationBoxService>();
             builder.Services.AddTransient<IFileService, FileService>();
             builder.Services.AddTransient<IOfferLinkService, OfferLinkService>();
-            builder.Services.AddTransient<IProductAttributeService, ProductAttributeService>();
+            builder.Services.AddTransient<IProductTypeService, ProductTypeService>();
             builder.Services.AddTransient<IProductRequestService, ProductRequestService>();
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<ITokenService, TokenService>();

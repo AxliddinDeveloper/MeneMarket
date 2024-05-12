@@ -9,7 +9,9 @@ namespace MeneMarket.Services.Orchestrations.Products
 
         IQueryable<Product> RetrieveAllProducts();
         ValueTask<Product> RetrieveProductByIdAsync(Guid id);
-        ValueTask<Product> ModifyProductAsync(Product product, List<string> bytes64String, List<string> imageFilePaths);
+        ValueTask<Product> ModifyProductAsync(Product product, 
+            List<string> bytes64String);
+
         ValueTask<Product> RemoveProductAsync(Guid id);
     }
 }

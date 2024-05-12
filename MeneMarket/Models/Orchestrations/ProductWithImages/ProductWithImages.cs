@@ -6,6 +6,5 @@ namespace MeneMarket.Models.Orchestrations.ProductWithImages
     {
         public Product Product { get; set; }
         public List<string> bytes { get; set; }
-        public List<string> ImageFilePaths { get; set; }
     }
 }

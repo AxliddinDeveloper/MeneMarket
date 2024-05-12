@@ -1,26 +1,30 @@
-﻿using MeneMarket.Models.Foundations.ProductAttributes;
+﻿using MeneMarket.Models.Foundations.ProductTypes;
 using MeneMarket.Models.Foundations.Products;
-using MeneMarket.Models.Orchestrations.UserWithImages;
-using MeneMarket.Services.Foundations.ProductAttributes;
+using MeneMarket.Services.Foundations.ProductTypes;
 using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Products;
+using MeneMarket.Services.Foundations.ImageMetadatas;
+using MeneMarket.Models.Foundations.ImageMetadatas;
 
 namespace MeneMarket.Services.Orchestrations.Products
 {
     public class ProductOrchestrationService : IProductOrchestrationService
     {
         private readonly IProductProcessingService productProcessingService;
-        private readonly IProductAttributeService productAttributeService;
+        private readonly IProductTypeService ProductTypeService;
         private readonly IFileProcessingService fileProcessingService;
+        private readonly IImageMetadataService imageMetadataService;
 
         public ProductOrchestrationService(
             IProductProcessingService productProcessingService,
             IFileProcessingService fileProcessingService,
-            IProductAttributeService productAttributeService)
+            IProductTypeService ProductTypeService,
+            IImageMetadataService imageMetadataService)
         {
             this.productProcessingService = productProcessingService;
-            this.productAttributeService = productAttributeService;
+            this.ProductTypeService = ProductTypeService;
             this.fileProcessingService = fileProcessingService;
+            this.imageMetadataService = imageMetadataService;
         }
 
         public async ValueTask<Product> AddProductAsync(Product product,
@@ -28,8 +32,8 @@ namespace MeneMarket.Services.Orchestrations.Products
         {
             product.ProductId = Guid.NewGuid();
 
-            if (product.ProductAttributes == null)
-                throw new ArgumentNullException("Product Attribute is null");
+            if (product.ProductTypes == null)
+                throw new ArgumentNullException("Product Type is null");
 
             var storedProduct =
                await this.productProcessingService.AddProductAsync(product);
@@ -38,36 +42,37 @@ namespace MeneMarket.Services.Orchestrations.Products
             {
                 foreach (var byte64String in bytes64String)
                 {
-                    string fileName = Guid.NewGuid().ToString() + ".jpg";
+                    string fileName = Guid.NewGuid().ToString() + ".webp";
                     byte[] bytes = Convert.FromBase64String(byte64String);
                     var memoryStream = ConvertBytesToMemoryStream(bytes);
                     string filePath =
                             await this.fileProcessingService.UploadFileAsync(
                                 memoryStream, fileName);
 
-                    if (storedProduct.Images == null)
-                         storedProduct.Images = new List<string>();
+                    ImageMetadata imageMetadata = new ImageMetadata
+                    {
+                        Id = Guid.NewGuid(),
+                        FilePath = filePath,
+                        ProductId = product.ProductId,
+                    };
 
-                    storedProduct.Images.Add(filePath);
+                    await this.imageMetadataService.AddImageMetadataAsync(imageMetadata);
                 }
                 await this.productProcessingService.ModifyProductAsync(storedProduct);
             }
 
-            if (product.ProductAttributes != null)
+            if (product.ProductTypes != null)
             {
-                foreach (var attribute in storedProduct.ProductAttributes)
+                foreach (var attribute in storedProduct.ProductTypes)
                 {
-                    var productAttribute = new ProductAttribute
+                    var ProductType = new ProductType
                     {
                         Product = storedProduct,
                         Count = attribute.Count,
-                        Size = attribute.Size,
-                        Belong = attribute.Belong,
-                        Color = attribute.Color,
                         ProductId = storedProduct.ProductId
                     };
 
-                    await this.productAttributeService.AddProductAttributeAsync(productAttribute);
+                    await this.ProductTypeService.AddProductTypeAsync(ProductType);
                 }
 
                 return await this.productProcessingService.RetrieveProductByIdAsync(storedProduct.ProductId);
@@ -84,9 +89,14 @@ namespace MeneMarket.Services.Orchestrations.Products
 
         public async ValueTask<Product> ModifyProductAsync(
             Product product,
-           List<string> bytes64String, 
-            List<string> imageFilePaths)
+           List<string> bytes64String)
         {
+            if (product.ProductTypes == null)
+                throw new ArgumentNullException("Product Type is null");
+
+            var storedProduct =
+               await this.productProcessingService.RetrieveProductByIdAsync(product.ProductId);
+
             if (bytes64String != null)
             {
                 foreach (var byte64String in bytes64String)
@@ -94,33 +104,58 @@ namespace MeneMarket.Services.Orchestrations.Products
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
                     byte[] bytes = Convert.FromBase64String(byte64String);
                     var memoryStream = ConvertBytesToMemoryStream(bytes);
+
                     string filePath =
                             await this.fileProcessingService.UploadFileAsync(
                                 memoryStream, fileName);
 
-                    product.Images.Add(filePath);
+                    ImageMetadata imageMetadata = new ImageMetadata
+                    {
+                        Id = Guid.NewGuid(),
+                        FilePath = filePath,
+                        ProductId = product.ProductId,
+                    };
+
+                    await this.imageMetadataService.AddImageMetadataAsync(imageMetadata);
+                }
+
+                var AllImageMetadatas =
+                   this.imageMetadataService.RetrieveAllImageMetadatas();
+
+                foreach (var imageMetadata in AllImageMetadatas)
+                {
+                    if (imageMetadata.ProductId == product.ProductId)
+                    {
+                        var selectedimageMetadata = 
+                            product.ImageMetadatas.FirstOrDefault(i => i.Id == imageMetadata.Id);
+
+                        if (selectedimageMetadata == null)
+                            await this.imageMetadataService.RemoveImageMetadataByIdAsync(imageMetadata.Id);
+                    }
                 }
             }
 
-            if (imageFilePaths != null)
-            {
-                foreach (var imageFilePath in imageFilePaths)
-                {
-                    product.Images.Remove(imageFilePath);
-                    string imageName = Path.GetFileName(imageFilePath);
-                    this.fileProcessingService.DeleteImageFile(imageName);
-                }
-            }
+             foreach (var attribute in product.ProductTypes)
+             {
+                 var ProductType = await this.ProductTypeService.RetrieveProductTypeByIdAsync(attribute.ProductTypeId);
+                 if (ProductType != null && ProductType != attribute)
+                     await this.ProductTypeService.ModifyProductTypeAsync(attribute);
+                 else if (ProductType == null)
+                     await this.ProductTypeService.AddProductTypeAsync(attribute);
+             }
 
-            if (product.ProductAttributes != null)
+            var AllProductTypes = 
+                this.ProductTypeService.RetrieveAllProductTypes();
+
+            foreach (var productType in AllProductTypes)
             {
-                foreach (var attribute in product.ProductAttributes)
+                if (productType.ProductId == product.ProductId)
                 {
-                    var productAttribute = await this.productAttributeService.RetrieveProductAttributeByIdAsync(attribute.ProductAttributeId);
-                    if (productAttribute != null)
-                        await this.productAttributeService.ModifyProductAttributeAsync(attribute);
-                    else
-                        await this.productAttributeService.AddProductAttributeAsync(attribute);
+                    var selectedProductType = 
+                        product.ProductTypes.FirstOrDefault(t => t.ProductTypeId == productType.ProductId);
+
+                    if (selectedProductType == null)
+                        await this.ProductTypeService.RemoveProductTypeAsync(productType.ProductTypeId);
                 }
             }
 
@@ -132,11 +167,11 @@ namespace MeneMarket.Services.Orchestrations.Products
             var product =
                 await this.productProcessingService.RetrieveProductByIdAsync(id);
 
-            foreach (var imageFilePath in product.Images)
-            {
-                string imageName = imageFilePath.Replace(@"imageFiles\\", "");
-                fileProcessingService.DeleteImageFile(imageName);
-            }
+            //foreach (var imageFilePath in product.Images)
+            //{
+            //    string imageName = imageFilePath.Replace(@"imageFiles\\", "");
+            //    fileProcessingService.DeleteImageFile(imageName);
+            //}
 
             return await this.productProcessingService.RemoveProductByIdAsync(id);
         }

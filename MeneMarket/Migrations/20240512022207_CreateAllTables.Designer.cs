@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240416061654_CreeateAllTables")]
-    partial class CreeateAllTables
+    [Migration("20240512022207_CreateAllTables")]
+    partial class CreateAllTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -134,6 +134,25 @@ namespace MeneMarket.Migrations
                     b.ToTable("Donations");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ImageMetadata");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
                 {
                     b.Property<Guid>("OfferLinkId")
@@ -167,34 +186,6 @@ namespace MeneMarket.Migrations
                     b.ToTable("OfferLinks");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
-                {
-                    b.Property<Guid>("ProductAttributeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Belong")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("Color")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<short>("Count")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Size")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ProductAttributeId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductAttributes");
-                });
-
             modelBuilder.Entity("MeneMarket.Models.Foundations.ProductRequests.ProductRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -226,6 +217,28 @@ namespace MeneMarket.Migrations
                     b.ToTable("ProductRequests");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductTypes.ProductType", b =>
+                {
+                    b.Property<Guid>("ProductTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<short>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProductTypeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductTypes");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.Products.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -238,31 +251,25 @@ namespace MeneMarket.Migrations
                     b.Property<string>("Brand")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("Images")
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsArchived")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsLiked")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
 
                     b.Property<short>("NumberSold")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<short>("NumberStars")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProductOwner")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ProductType")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("ScidPrice")
@@ -362,6 +369,17 @@ namespace MeneMarket.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ImageMetadatas.ImageMetadata", b =>
+                {
+                    b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
+                        .WithMany("ImageMetadatas")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
@@ -381,10 +399,10 @@ namespace MeneMarket.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductAttributes.ProductAttribute", b =>
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductRequests.ProductRequest", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
-                        .WithMany("ProductAttributes")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -392,10 +410,10 @@ namespace MeneMarket.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductRequests.ProductRequest", b =>
+            modelBuilder.Entity("MeneMarket.Models.Foundations.ProductTypes.ProductType", b =>
                 {
                     b.HasOne("MeneMarket.Models.Foundations.Products.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductTypes")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -417,9 +435,11 @@ namespace MeneMarket.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("ImageMetadatas");
+
                     b.Navigation("OfferLinks");
 
-                    b.Navigation("ProductAttributes");
+                    b.Navigation("ProductTypes");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>

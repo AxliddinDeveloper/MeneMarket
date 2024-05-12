@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MeneMarket.Migrations
 {
     /// <inheritdoc />
-    public partial class CreeateAllTables : Migration
+    public partial class CreateAllTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,18 +28,16 @@ namespace MeneMarket.Migrations
                 columns: table => new
                 {
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Brand = table.Column<string>(type: "TEXT", nullable: true),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     ScidPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     AdvertisingPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     NumberSold = table.Column<short>(type: "INTEGER", nullable: false),
-                    NumberStars = table.Column<short>(type: "INTEGER", nullable: false),
+                    Count = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductOwner = table.Column<string>(type: "TEXT", nullable: true),
-                    IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
-                    IsLiked = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ProductType = table.Column<string>(type: "TEXT", nullable: true),
-                    Images = table.Column<string>(type: "TEXT", nullable: true)
+                    IsArchived = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,21 +86,18 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductAttributes",
+                name: "ImageMetadata",
                 columns: table => new
                 {
-                    ProductAttributeId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Count = table.Column<short>(type: "INTEGER", nullable: false),
-                    Size = table.Column<string>(type: "TEXT", nullable: true),
-                    Belong = table.Column<int>(type: "INTEGER", nullable: false),
-                    Color = table.Column<int>(type: "INTEGER", nullable: true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    FilePath = table.Column<string>(type: "TEXT", nullable: true),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductAttributes", x => x.ProductAttributeId);
+                    table.PrimaryKey("PK_ImageMetadata", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductAttributes_Products_ProductId",
+                        name: "FK_ImageMetadata_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -126,6 +121,26 @@ namespace MeneMarket.Migrations
                     table.PrimaryKey("PK_ProductRequests", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProductRequests_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductTypes",
+                columns: table => new
+                {
+                    ProductTypeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Count = table.Column<short>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductTypes", x => x.ProductTypeId);
+                    table.ForeignKey(
+                        name: "FK_ProductTypes_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -253,6 +268,11 @@ namespace MeneMarket.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImageMetadata_ProductId",
+                table: "ImageMetadata",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OfferLinks_ProductId",
                 table: "OfferLinks",
                 column: "ProductId");
@@ -263,13 +283,13 @@ namespace MeneMarket.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductAttributes_ProductId",
-                table: "ProductAttributes",
+                name: "IX_ProductRequests_ProductId",
+                table: "ProductRequests",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductRequests_ProductId",
-                table: "ProductRequests",
+                name: "IX_ProductTypes_ProductId",
+                table: "ProductTypes",
                 column: "ProductId");
         }
 
@@ -289,10 +309,13 @@ namespace MeneMarket.Migrations
                 name: "DonatedUsers");
 
             migrationBuilder.DropTable(
-                name: "ProductAttributes");
+                name: "ImageMetadata");
 
             migrationBuilder.DropTable(
                 name: "ProductRequests");
+
+            migrationBuilder.DropTable(
+                name: "ProductTypes");
 
             migrationBuilder.DropTable(
                 name: "OfferLinks");

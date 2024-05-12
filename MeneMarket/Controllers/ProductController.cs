@@ -37,8 +37,7 @@ namespace MeneMarket.Controllers
         public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages) =>
             await this.productOrchestrationService.ModifyProductAsync(
                 productWithImages.Product, 
-                productWithImages.bytes, 
-                productWithImages.ImageFilePaths);
+                productWithImages.bytes);
 
         [HttpDelete]
         [Authorize(Roles = "Admin")]
