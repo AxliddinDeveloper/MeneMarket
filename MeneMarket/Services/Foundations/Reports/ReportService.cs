@@ -2,7 +2,7 @@
 
 namespace MeneMarket.Services.Foundations.Reports
 {
-    public class ReportService : IReportService
+    public class ReportService  
     {
         private readonly IStorageBroker storageBroker;
 
