@@ -1,9 +1,11 @@
 ﻿using MeneMarket.Models.Foundations.ImageMetadatas;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeneMarket.Brokers.Storages
 {
     public partial class StorageBroker
     {
+        public DbSet<ImageMetadata> ImageMetadatas { get; set; }
         public async ValueTask<ImageMetadata> InsertImageMetadataAsync(ImageMetadata imageMetadata) =>
             await InsertAsync(imageMetadata);
 

@@ -6,10 +6,8 @@ namespace MeneMarket.Brokers.Files
     public class FileBroker : IFileBroker
     {
         public async ValueTask<string> SaveFileAsync(
-            MemoryStream memoryStream, string fileName, string uploadsFolder)
+            MemoryStream memoryStream, string fileName, string uploadsFolder, int maxWidth, int maxHeight)
         {
-            int maxWidth = 600;
-            int maxHeight = 800;
             string filePath = Path.Combine(uploadsFolder, fileName);
             var relativePath = Path.Combine("imageFiles", fileName);
 

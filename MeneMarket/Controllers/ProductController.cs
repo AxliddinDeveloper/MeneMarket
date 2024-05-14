@@ -1,4 +1,5 @@
 ﻿using MeneMarket.Models.Foundations.Products;
+using MeneMarket.Models.Orchestrations.CombinedProducts;
 using MeneMarket.Models.Orchestrations.ProductWithImages;
 using MeneMarket.Services.Orchestrations.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -25,8 +26,18 @@ namespace MeneMarket.Controllers
             await this.productOrchestrationService.AddProductAsync(productWithImages.Product, productWithImages.bytes);
 
         [HttpGet]
-        public IQueryable<Product> GetAllProducts() =>
-            productOrchestrationService.RetrieveAllProducts();
+        public CombinedProducts GetAllProducts()
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role");
+            int userRoleInInteger;
+
+            if (userRole != null)
+                userRoleInInteger = Int32.Parse(userRole.Value);
+            else 
+                userRoleInInteger = 0;
+
+            return productOrchestrationService.RetrieveAllProducts(userRoleInInteger);
+        }
 
         [HttpGet("ById")]
         public async ValueTask<ActionResult<Product>> GetProductByIdAsync(Guid id) =>
@@ -36,7 +47,7 @@ namespace MeneMarket.Controllers
         [Authorize(Roles = "Admin")]
         public async ValueTask<ActionResult<Product>> PutProductAsync(ProductWithImages productWithImages) =>
             await this.productOrchestrationService.ModifyProductAsync(
-                productWithImages.Product, 
+                productWithImages.Product,
                 productWithImages.bytes);
 
         [HttpDelete]

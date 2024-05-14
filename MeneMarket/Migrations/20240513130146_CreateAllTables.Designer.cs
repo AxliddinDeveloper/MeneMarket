@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeneMarket.Migrations
 {
     [DbContext(typeof(StorageBroker))]
-    [Migration("20240512022207_CreateAllTables")]
+    [Migration("20240513130146_CreateAllTables")]
     partial class CreateAllTables
     {
         /// <inheritdoc />
@@ -78,6 +78,9 @@ namespace MeneMarket.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IpAddress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ProductId")
@@ -150,7 +153,30 @@ namespace MeneMarket.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ImageMetadata");
+                    b.ToTable("ImageMetadatas");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.News.News", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PostedTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("imageFilePath")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.OfferLinks.OfferLink", b =>
@@ -195,6 +221,9 @@ namespace MeneMarket.Migrations
                     b.Property<string>("IpAddress")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("TEXT");
 
@@ -207,8 +236,8 @@ namespace MeneMarket.Migrations
                     b.Property<string>("UserPhoneNumber")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserRegion")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("UserRegion")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -254,10 +283,16 @@ namespace MeneMarket.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("IsArchived")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsLiked")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -269,15 +304,29 @@ namespace MeneMarket.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ProductOwner")
-                        .HasColumnType("TEXT");
-
                     b.Property<decimal>("ScidPrice")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MeneMarket.Models.Foundations.Reports.Report", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReportType")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reports");
                 });
 
             modelBuilder.Entity("MeneMarket.Models.Foundations.Users.User", b =>

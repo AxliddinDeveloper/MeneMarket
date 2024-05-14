@@ -17,8 +17,9 @@ namespace MeneMarket.Models.Foundations.Products
         public decimal AdvertisingPrice { get; set; }
         public short NumberSold { get; set; }
         public int Count { get; set; }
-        public string ProductOwner { get; set; }
         public bool IsArchived { get; set; }
+        public bool IsLiked {  get; set; }
+        public DateTime CreatedDate { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<ProductType> ProductTypes { get; set; }
         [JsonIgnore]

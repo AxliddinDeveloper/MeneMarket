@@ -12,8 +12,8 @@ namespace MeneMarket.Services.Foundations.Files
         }
 
         public ValueTask<string> UploadFileAsync(
-            MemoryStream memoryStream, string fileName, string uploadsFolder) =>
-            this.fileBroker.SaveFileAsync(memoryStream, fileName, uploadsFolder);
+            MemoryStream memoryStream, string fileName, string uploadsFolder, int maxWidth, int maxHeight) =>
+            this.fileBroker.SaveFileAsync(memoryStream, fileName, uploadsFolder, maxWidth, maxHeight);
 
         public Task RemoveImageFile(string filePath) =>
             this.fileBroker.DeleteImageFile(filePath);

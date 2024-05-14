@@ -24,6 +24,21 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "News",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    PostedTime = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    imageFilePath = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_News", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -36,12 +51,26 @@ namespace MeneMarket.Migrations
                     AdvertisingPrice = table.Column<decimal>(type: "TEXT", nullable: false),
                     NumberSold = table.Column<short>(type: "INTEGER", nullable: false),
                     Count = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductOwner = table.Column<string>(type: "TEXT", nullable: true),
-                    IsArchived = table.Column<bool>(type: "INTEGER", nullable: false)
+                    IsArchived = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsLiked = table.Column<bool>(type: "INTEGER", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ReportType = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,6 +101,7 @@ namespace MeneMarket.Migrations
                     UserName = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<string>(type: "TEXT", nullable: true),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -86,18 +116,20 @@ namespace MeneMarket.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ImageMetadata",
+                name: "ImageMetadatas",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    FilePath = table.Column<string>(type: "TEXT", nullable: true),
+                    LowImageFilePath = table.Column<string>(type: "TEXT", nullable: true),
+                    MediumImageFilePath = table.Column<string>(type: "TEXT", nullable: true),
+                    HightImageFilePath = table.Column<string>(type: "TEXT", nullable: true),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImageMetadata", x => x.Id);
+                    table.PrimaryKey("PK_ImageMetadatas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageMetadata_Products_ProductId",
+                        name: "FK_ImageMetadatas_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -112,8 +144,9 @@ namespace MeneMarket.Migrations
                     IpAddress = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", nullable: true),
                     UserPhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    UserRegion = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserRegion = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -268,8 +301,8 @@ namespace MeneMarket.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageMetadata_ProductId",
-                table: "ImageMetadata",
+                name: "IX_ImageMetadatas_ProductId",
+                table: "ImageMetadatas",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -309,13 +342,19 @@ namespace MeneMarket.Migrations
                 name: "DonatedUsers");
 
             migrationBuilder.DropTable(
-                name: "ImageMetadata");
+                name: "ImageMetadatas");
+
+            migrationBuilder.DropTable(
+                name: "News");
 
             migrationBuilder.DropTable(
                 name: "ProductRequests");
 
             migrationBuilder.DropTable(
                 name: "ProductTypes");
+
+            migrationBuilder.DropTable(
+                name: "Reports");
 
             migrationBuilder.DropTable(
                 name: "OfferLinks");

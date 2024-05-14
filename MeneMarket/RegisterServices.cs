@@ -7,10 +7,11 @@ using MeneMarket.Services.Foundations.Comments;
 using MeneMarket.Services.Foundations.DonatedUsers;
 using MeneMarket.Services.Foundations.DonationBoxes;
 using MeneMarket.Services.Foundations.Files;
+using MeneMarket.Services.Foundations.ImageMetadatas;
 using MeneMarket.Services.Foundations.OfferLinks;
-using MeneMarket.Services.Foundations.ProductTypes;
 using MeneMarket.Services.Foundations.ProductRequests;
 using MeneMarket.Services.Foundations.Products;
+using MeneMarket.Services.Foundations.ProductTypes;
 using MeneMarket.Services.Foundations.Tokens;
 using MeneMarket.Services.Foundations.Users;
 using MeneMarket.Services.Orchestrations.Clients;
@@ -23,7 +24,6 @@ using MeneMarket.Services.Processings.DonationBoxes;
 using MeneMarket.Services.Processings.Files;
 using MeneMarket.Services.Processings.Products;
 using MeneMarket.Services.Processings.Users;
-using MeneMarket.Services.Foundations.ImageMetadatas;
 
 namespace MeneMarket
 {

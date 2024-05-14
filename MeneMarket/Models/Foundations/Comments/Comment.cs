@@ -10,6 +10,7 @@ namespace MeneMarket.Models.Foundations.Comments
         public string UserName { get; set; }
         public string Description { get; set; }
         public string Status { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public Guid ProductId { get; set; }
         [JsonIgnore]
         public virtual Product Product { get; set; }

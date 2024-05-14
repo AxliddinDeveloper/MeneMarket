@@ -6,8 +6,6 @@ namespace MeneMarket.Services.Foundations.Reports
     {
         ValueTask<Report> AddReportAsync(Report report);
         IQueryable<Report> RetrieveAllReports();
-        ValueTask<Report> SelectReportByIdAsync(Guid Id);
-        ValueTask<Report> ModifyReportAsync(Report report);
-        ValueTask<Report> DeleteReportAsync(Guid Id);
+        ValueTask<Report> RemoveReportAsync(Guid id);
     }
 }
